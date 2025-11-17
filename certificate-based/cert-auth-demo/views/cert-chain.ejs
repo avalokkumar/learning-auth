@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Certificate Chain</title><link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand"><span class="logo">🔐</span><span>Certificate Auth</span></div>
+<div class="nav-menu"><a href="/dashboard" class="nav-link">Dashboard</a><a href="/dashboard/profile" class="nav-link">Profile</a>
+<span class="nav-user">🔑 <%= user.commonName %></span><a href="/auth/logout" class="nav-link logout">Logout</a></div></div></nav>
+<div class="main-content"><div class="container"><h1>🔗 Certificate Chain</h1>
+<p class="subtitle">Verification path from your certificate to the root CA</p>
+<% chain.forEach(function(cert, index) { %>
+<div class="chain-item"><h3>Level <%= cert.depth %>: <%= cert.depth === 0 ? 'Your Certificate' : (cert.depth === chain.length - 1 ? 'Root CA' : 'Intermediate CA') %></h3>
+<div class="info-row"><span class="label">Subject:</span><span class="value"><%= cert.subject.CN %></span></div>
+<div class="info-row"><span class="label">Issuer:</span><span class="value"><%= cert.issuer.CN %></span></div>
+<div class="info-row"><span class="label">Serial:</span><span class="value code"><%= cert.serialNumber %></span></div>
+<div class="info-row"><span class="label">Valid:</span><span class="value"><%= cert.validFrom %> → <%= cert.validTo %></span></div>
+<div class="info-row"><span class="label">Fingerprint:</span><span class="value code"><%= cert.fingerprint %></span></div>
+<% if (index < chain.length - 1) { %><div class="chain-arrow">⬇️</div><% } %>
+</div><% }); %></div></div><footer class="footer"><div class="container"><p>&copy; 2024 Certificate Auth Demo</p></div></footer></body></html>

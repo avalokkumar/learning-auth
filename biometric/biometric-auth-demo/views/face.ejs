@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span>Biometric Auth</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link">Profile</a>
+                <span class="nav-user">👤 <%= user.username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>😊 Face Recognition</h1>
+
+            <div class="biometric-demo-card">
+                <div class="biometric-info">
+                    <h2>How It Works</h2>
+                    <p>Face recognition creates a 3D map of your face by measuring the distance between facial features like eyes, nose, and mouth. It includes liveness detection to prevent spoofing.</p>
+                    <ul>
+                        <li><strong>Speed:</strong> 1-2 seconds</li>
+                        <li><strong>Accuracy:</strong> 95-99%</li>
+                        <li><strong>Type:</strong> Physical Biometric</li>
+                        <li><strong>3D Mapping:</strong> Yes</li>
+                    </ul>
+                </div>
+
+                <div class="biometric-simulator">
+                    <h2><%= enrolled ? 'Verify Face' : 'Enroll Face' %></h2>
+                    <div class="face-scanner" id="faceScanner">
+                        <div class="face-frame">
+                            <div class="face-icon">😊</div>
+                            <div class="face-markers">
+                                <div class="marker marker-tl"></div>
+                                <div class="marker marker-tr"></div>
+                                <div class="marker marker-bl"></div>
+                                <div class="marker marker-br"></div>
+                            </div>
+                        </div>
+                        <p class="scan-instruction">Position your face in the frame</p>
+                    </div>
+
+                    <div class="action-buttons">
+                        <% if (!enrolled) { %>
+                            <button class="btn btn-primary" id="enrollBtn">Enroll Face</button>
+                        <% } else { %>
+                            <button class="btn btn-primary" id="verifyBtn">Verify Face</button>
+                        <% } %>
+                    </div>
+
+                    <div id="resultDisplay" class="result-display"></div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3>Real-World Applications</h3>
+                <div class="application-grid">
+                    <div class="application-item">
+                        <span class="app-icon">📱</span>
+                        <strong>Smartphones</strong>
+                        <p>iPhone Face ID, Android Face Unlock</p>
+                    </div>
+                    <div class="application-item">
+                        <span class="app-icon">🛂</span>
+                        <strong>Border Control</strong>
+                        <p>Airport security, passport verification</p>
+                    </div>
+                    <div class="application-item">
+                        <span class="app-icon">🏦</span>
+                        <strong>Banking</strong>
+                        <p>Mobile banking apps, payment authorization</p>
+                    </div>
+                    <div class="application-item">
+                        <span class="app-icon">🏢</span>
+                        <strong>Access Control</strong>
+                        <p>Office building security</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Biometric Authentication Demo</p>
+        </div>
+    </footer>
+
+    <script>
+        const enrolled = <%= enrolled ? 'true' : 'false' %>;
+        const scanner = document.getElementById('faceScanner');
+        const resultDisplay = document.getElementById('resultDisplay');
+
+        <% if (!enrolled) { %>
+            document.getElementById('enrollBtn').addEventListener('click', async () => {
+                scanner.classList.add('scanning');
+                resultDisplay.innerHTML = '<p class="info">Scanning face with 3D mapping...</p>';
+
+                setTimeout(async () => {
+                    try {
+                        const response = await fetch('/biometric/enroll/face', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                faceData: { quality: 90, is3D: true }
+                            })
+                        });
+
+                        const result = await response.json();
+                        scanner.classList.remove('scanning');
+
+                        if (result.success) {
+                            resultDisplay.innerHTML = '<div class="alert alert-success"><strong>✓ Success!</strong> Face template enrolled. Redirecting...</div>';
+                            setTimeout(() => window.location.reload(), 2000);
+                        } else {
+                            resultDisplay.innerHTML = '<div class="alert alert-error"><strong>✗ Failed</strong> ' + (result.error || 'Enrollment failed') + '</div>';
+                        }
+                    } catch (error) {
+                        scanner.classList.remove('scanning');
+                        resultDisplay.innerHTML = '<div class="alert alert-error"><strong>✗ Error</strong> ' + error.message + '</div>';
+                    }
+                }, 2500);
+            });
+        <% } else { %>
+            document.getElementById('verifyBtn').addEventListener('click', async () => {
+                scanner.classList.add('scanning');
+                resultDisplay.innerHTML = '<p class="info">Verifying face with liveness detection...</p>';
+
+                setTimeout(async () => {
+                    try {
+                        const response = await fetch('/biometric/verify/face', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                faceData: { simulateSuccess: true, livenessCheck: true }
+                            })
+                        });
+
+                        const result = await response.json();
+                        scanner.classList.remove('scanning');
+
+                        if (result.success) {
+                            resultDisplay.innerHTML = `
+                                <div class="alert alert-success">
+                                    <strong>✓ Verified!</strong> Confidence: ${result.confidence}%
+                                    <p>${result.message} • Liveness: ${result.liveness ? '✓ Detected' : '✗ Failed'}</p>
+                                </div>
+                            `;
+                        } else {
+                            resultDisplay.innerHTML = `
+                                <div class="alert alert-error">
+                                    <strong>✗ Failed</strong> Confidence: ${result.confidence}%
+                                    <p>${result.message || result.error}</p>
+                                </div>
+                            `;
+                        }
+                    } catch (error) {
+                        scanner.classList.remove('scanning');
+                        resultDisplay.innerHTML = '<div class="alert alert-error"><strong>✗ Error</strong> ' + error.message + '</div>';
+                    }
+                }, 2500);
+            });
+        <% } %>
+    </script>
+</body>
+</html>

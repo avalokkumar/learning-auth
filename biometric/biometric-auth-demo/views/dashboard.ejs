@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span>Biometric Auth</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link active">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link">Profile</a>
+                <a href="/dashboard/enrollment" class="nav-link">Enrollment</a>
+                <span class="nav-user">👤 <%= user.username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>Welcome, <%= user.fullName %>!</h1>
+
+            <div class="enrollment-overview">
+                <h2>Biometric Enrollment Status</h2>
+                <div class="enrollment-grid">
+                    <div class="enrollment-card <%= enrollmentStatus.biometrics.fingerprint.enrolled ? 'enrolled' : '' %>">
+                        <span class="biometric-icon">👆</span>
+                        <h3>Fingerprint</h3>
+                        <p><%= enrollmentStatus.biometrics.fingerprint.enrolled ? '✅ Enrolled' : '❌ Not Enrolled' %></p>
+                        <a href="/dashboard/fingerprint" class="btn btn-sm <%= enrollmentStatus.biometrics.fingerprint.enrolled ? 'btn-secondary' : 'btn-primary' %>">
+                            <%= enrollmentStatus.biometrics.fingerprint.enrolled ? 'Test' : 'Enroll' %>
+                        </a>
+                    </div>
+
+                    <div class="enrollment-card <%= enrollmentStatus.biometrics.face.enrolled ? 'enrolled' : '' %>">
+                        <span class="biometric-icon">😊</span>
+                        <h3>Face</h3>
+                        <p><%= enrollmentStatus.biometrics.face.enrolled ? '✅ Enrolled' : '❌ Not Enrolled' %></p>
+                        <a href="/dashboard/face" class="btn btn-sm <%= enrollmentStatus.biometrics.face.enrolled ? 'btn-secondary' : 'btn-primary' %>">
+                            <%= enrollmentStatus.biometrics.face.enrolled ? 'Test' : 'Enroll' %>
+                        </a>
+                    </div>
+
+                    <div class="enrollment-card <%= enrollmentStatus.biometrics.iris.enrolled ? 'enrolled' : '' %>">
+                        <span class="biometric-icon">👁️</span>
+                        <h3>Iris</h3>
+                        <p><%= enrollmentStatus.biometrics.iris.enrolled ? '✅ Enrolled' : '❌ Not Enrolled' %></p>
+                        <a href="/dashboard/iris" class="btn btn-sm <%= enrollmentStatus.biometrics.iris.enrolled ? 'btn-secondary' : 'btn-primary' %>">
+                            <%= enrollmentStatus.biometrics.iris.enrolled ? 'Test' : 'Enroll' %>
+                        </a>
+                    </div>
+
+                    <div class="enrollment-card <%= enrollmentStatus.biometrics.voice.enrolled ? 'enrolled' : '' %>">
+                        <span class="biometric-icon">🎤</span>
+                        <h3>Voice</h3>
+                        <p><%= enrollmentStatus.biometrics.voice.enrolled ? '✅ Enrolled' : '❌ Not Enrolled' %></p>
+                        <a href="/dashboard/voice" class="btn btn-sm <%= enrollmentStatus.biometrics.voice.enrolled ? 'btn-secondary' : 'btn-primary' %>">
+                            <%= enrollmentStatus.biometrics.voice.enrolled ? 'Test' : 'Enroll' %>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="multi-modal-section">
+                    <h3>🔗 Multi-Modal Authentication</h3>
+                    <p>Combine multiple biometric methods for enhanced security</p>
+                    <a href="/dashboard/multi-modal" class="btn btn-primary">Try Multi-Modal Auth</a>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h2>📊 Recent Activity</h2>
+                    <% if (recentHistory.length > 0) { %>
+                        <div class="history-list">
+                            <% recentHistory.forEach(function(h) { %>
+                                <div class="history-item">
+                                    <span class="method-badge <%= h.method %>"><%= h.method %></span>
+                                    <span class="<%= h.success ? 'success' : 'failed' %>">
+                                        <%= h.success ? '✓' : '✗' %> <%= h.confidence %>%
+                                    </span>
+                                    <span class="timestamp"><%= new Date(h.timestamp).toLocaleTimeString() %></span>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } else { %>
+                        <p>No authentication attempts yet. Try enrolling and testing biometric methods!</p>
+                    <% } %>
+                </div>
+
+                <div class="dashboard-card">
+                    <h2>🔐 Current Session</h2>
+                    <div class="info-row">
+                        <span class="label">Login Method:</span>
+                        <span class="value"><%= authMethod %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Enrolled Biometrics:</span>
+                        <span class="value"><%= enrollmentStatus.totalEnrolled %> / 4</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Biometric Authentication Demo</p>
+        </div>
+    </footer>
+</body>
+</html>

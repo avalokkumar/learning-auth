@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Profile</title><link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand"><span class="logo">🔐</span><span>Certificate Auth</span></div>
+<div class="nav-menu"><a href="/dashboard" class="nav-link">Dashboard</a><a href="/dashboard/profile" class="nav-link active">Profile</a>
+<span class="nav-user">🔑 <%= user.commonName %></span><a href="/auth/logout" class="nav-link logout">Logout</a></div></div></nav>
+<div class="main-content"><div class="container"><h1>Profile</h1>
+<div class="profile-card"><h2>Certificate Information</h2>
+<div class="info-row"><span class="label">CN:</span><span class="value"><%= user.commonName %></span></div>
+<div class="info-row"><span class="label">Email:</span><span class="value"><%= user.email %></span></div>
+<div class="info-row"><span class="label">Organization:</span><span class="value"><%= user.organization %></span></div>
+<div class="info-row"><span class="label">Serial:</span><span class="value"><%= certificate.serialNumber %></span></div>
+<div class="info-row"><span class="label">Valid From:</span><span class="value"><%= certificate.validFrom %></span></div>
+<div class="info-row"><span class="label">Valid To:</span><span class="value"><%= certificate.validTo %></span></div>
+<div class="info-row"><span class="label">Fingerprint:</span><span class="value code"><%= certificate.fingerprint256 %></span></div>
+</div></div></div><footer class="footer"><div class="container"><p>&copy; 2024 Certificate Auth Demo</p></div></footer></body></html>

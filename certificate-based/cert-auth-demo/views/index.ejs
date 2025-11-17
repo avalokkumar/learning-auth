@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span>Certificate Auth</span>
+            </div>
+            <div class="nav-menu">
+                <% if (authenticated) { %>
+                    <a href="/dashboard" class="nav-link">Dashboard</a>
+                    <a href="/dashboard/profile" class="nav-link">Profile</a>
+                    <span class="nav-user">🔑 <%= user.name %></span>
+                    <a href="/auth/logout" class="nav-link logout">Logout</a>
+                <% } else { %>
+                    <a href="/" class="nav-link active">Home</a>
+                    <a href="/cert/setup" class="nav-link">Setup</a>
+                <% } %>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container">
+            <h1 class="hero-title">🔐 Certificate-Based Authentication</h1>
+            <p class="hero-subtitle">Secure authentication using X.509 digital certificates and mutual TLS (mTLS)</p>
+            
+            <% if (authenticated) { %>
+                <div class="auth-status success">
+                    <h2>✅ Authenticated</h2>
+                    <p>Welcome, <%= user.name %>!</p>
+                    <p>Your client certificate is valid and trusted.</p>
+                    <a href="/dashboard" class="btn btn-primary btn-large">Go to Dashboard</a>
+                </div>
+            <% } else { %>
+                <div class="auth-status warning">
+                    <h2>⚠️ Not Authenticated</h2>
+                    <p>No client certificate detected.</p>
+                    <a href="/cert/setup" class="btn btn-primary btn-large">Setup Certificate</a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="features">
+            <div class="feature-card">
+                <span class="feature-icon">📜</span>
+                <h3>X.509 Certificates</h3>
+                <p>Industry-standard digital certificates for authentication and encryption</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🤝</span>
+                <h3>Mutual TLS (mTLS)</h3>
+                <p>Both client and server verify each other's identity using certificates</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🔑</span>
+                <h3>Public Key Cryptography</h3>
+                <p>Asymmetric encryption ensures secure authentication without passwords</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🏛️</span>
+                <h3>Certificate Authority</h3>
+                <p>Trusted CA issues and signs all certificates in the PKI</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🔐</span>
+                <h3>Private Key Security</h3>
+                <p>Private keys never leave your device, ensuring maximum security</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">✅</span>
+                <h3>Certificate Validation</h3>
+                <p>Automatic verification of certificate chain, validity, and trust</p>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Install Certificate</h3>
+                    <p>Import your client certificate (PKCS#12) into your browser</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>TLS Handshake</h3>
+                    <p>Browser and server exchange certificates and verify each other</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Verify Identity</h3>
+                    <p>Server validates your certificate against the trusted CA</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Secure Access</h3>
+                    <p>Authenticated! Access granted to protected resources</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="use-cases">
+            <h2>Industry Applications</h2>
+            <div class="use-case-grid">
+                <div class="use-case">
+                    <span class="icon">🏦</span>
+                    <h3>Banking</h3>
+                    <p>High-security financial transactions</p>
+                </div>
+                <div class="use-case">
+                    <span class="icon">🏢</span>
+                    <h3>Enterprise</h3>
+                    <p>VPN access and corporate networks</p>
+                </div>
+                <div class="use-case">
+                    <span class="icon">🏥</span>
+                    <h3>Healthcare</h3>
+                    <p>HIPAA-compliant systems</p>
+                </div>
+                <div class="use-case">
+                    <span class="icon">🛡️</span>
+                    <h3>Government</h3>
+                    <p>Classified information systems</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Certificate-Based Authentication Demo | Educational Purpose</p>
+        </div>
+    </footer>
+</body>
+</html>

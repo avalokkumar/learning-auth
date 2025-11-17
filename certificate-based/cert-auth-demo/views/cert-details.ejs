@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span>Certificate Auth</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link">Profile</a>
+                <a href="/dashboard/cert-details" class="nav-link active">Certificate</a>
+                <span class="nav-user">🔑 <%= user.commonName %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>📜 Certificate Details (X.509)</h1>
+            
+            <div class="cert-section">
+                <h2>Version & Serial</h2>
+                <div class="info-row">
+                    <span class="label">Version:</span>
+                    <span class="value">v<%= certificate.version %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Serial Number:</span>
+                    <span class="value code"><%= certificate.serialNumber %></span>
+                </div>
+            </div>
+
+            <div class="cert-section">
+                <h2>Subject (Certificate Owner)</h2>
+                <div class="info-row">
+                    <span class="label">Common Name (CN):</span>
+                    <span class="value"><%= certificate.subject.commonName %></span>
+                </div>
+                <% if (certificate.subject.emailAddress) { %>
+                <div class="info-row">
+                    <span class="label">Email:</span>
+                    <span class="value"><%= certificate.subject.emailAddress %></span>
+                </div>
+                <% } %>
+                <% if (certificate.subject.organization) { %>
+                <div class="info-row">
+                    <span class="label">Organization (O):</span>
+                    <span class="value"><%= certificate.subject.organization %></span>
+                </div>
+                <% } %>
+                <% if (certificate.subject.organizationalUnit) { %>
+                <div class="info-row">
+                    <span class="label">Organizational Unit (OU):</span>
+                    <span class="value"><%= certificate.subject.organizationalUnit %></span>
+                </div>
+                <% } %>
+                <% if (certificate.subject.country) { %>
+                <div class="info-row">
+                    <span class="label">Country (C):</span>
+                    <span class="value"><%= certificate.subject.country %></span>
+                </div>
+                <% } %>
+            </div>
+
+            <div class="cert-section">
+                <h2>Issuer (Certificate Authority)</h2>
+                <div class="info-row">
+                    <span class="label">Common Name:</span>
+                    <span class="value"><%= certificate.issuer.commonName %></span>
+                </div>
+                <% if (certificate.issuer.organization) { %>
+                <div class="info-row">
+                    <span class="label">Organization:</span>
+                    <span class="value"><%= certificate.issuer.organization %></span>
+                </div>
+                <% } %>
+            </div>
+
+            <div class="cert-section">
+                <h2>Validity Period</h2>
+                <div class="info-row">
+                    <span class="label">Not Before:</span>
+                    <span class="value"><%= new Date(certificate.validity.notBefore).toLocaleString() %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Not After:</span>
+                    <span class="value"><%= new Date(certificate.validity.notAfter).toLocaleString() %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Status:</span>
+                    <span class="value <%= certificate.validity.isValid ? 'success' : 'failed' %>">
+                        <%= certificate.validity.isValid ? '✓ Valid' : '✗ Expired/Invalid' %>
+                    </span>
+                </div>
+            </div>
+
+            <div class="cert-section">
+                <h2>Public Key Information</h2>
+                <div class="info-row">
+                    <span class="label">Algorithm:</span>
+                    <span class="value"><%= certificate.publicKey.algorithm %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Key Size:</span>
+                    <span class="value"><%= certificate.publicKey.bits %> bits</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Exponent:</span>
+                    <span class="value code"><%= certificate.publicKey.exponent %></span>
+                </div>
+            </div>
+
+            <div class="cert-section">
+                <h2>Signature</h2>
+                <div class="info-row">
+                    <span class="label">Algorithm:</span>
+                    <span class="value"><%= certificate.signatureAlgorithm %></span>
+                </div>
+            </div>
+
+            <div class="cert-section">
+                <h2>Extensions</h2>
+                <% if (certificate.extensions && certificate.extensions.length > 0) { %>
+                    <% certificate.extensions.forEach(function(ext) { %>
+                        <div class="extension-item">
+                            <h3><%= ext.name %> <%= ext.critical ? '(Critical)' : '' %></h3>
+                            <pre><%= JSON.stringify(ext.value, null, 2) %></pre>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No extensions</p>
+                <% } %>
+            </div>
+
+            <div class="cert-section">
+                <h2>Fingerprints</h2>
+                <div class="info-row">
+                    <span class="label">SHA-1:</span>
+                    <span class="value code"><%= certificate.fingerprints.sha1 %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">SHA-256:</span>
+                    <span class="value code"><%= certificate.fingerprints.sha256 %></span>
+                </div>
+            </div>
+
+            <% if (certificate.verification) { %>
+            <div class="cert-section">
+                <h2>Verification Result</h2>
+                <div class="verification <%= certificate.verification.valid ? 'success' : 'error' %>">
+                    <% if (certificate.verification.valid) { %>
+                        <p>✅ Certificate is valid and trusted</p>
+                    <% } else { %>
+                        <p>❌ Certificate verification failed</p>
+                        <p><%= certificate.verification.error %></p>
+                    <% } %>
+                </div>
+            </div>
+            <% } %>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Certificate-Based Authentication Demo</p>
+        </div>
+    </footer>
+</body>
+</html>

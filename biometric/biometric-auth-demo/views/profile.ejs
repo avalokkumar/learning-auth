@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span>Biometric Auth</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link active">Profile</a>
+                <a href="/dashboard/enrollment" class="nav-link">Enrollment</a>
+                <span class="nav-user">👤 <%= user.username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>Your Profile</h1>
+
+            <div class="profile-grid">
+                <div class="profile-card">
+                    <h2>👤 Account Info</h2>
+                    <div class="info-row">
+                        <span class="label">Username:</span>
+                        <span class="value"><%= user.username %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Full Name:</span>
+                        <span class="value"><%= user.fullName %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Email:</span>
+                        <span class="value"><%= user.email %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Login Time:</span>
+                        <span class="value"><%= user.loginTime.toLocaleString() %></span>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <h2>🔐 Biometric Status</h2>
+                    <div class="info-row">
+                        <span class="label">Fingerprint:</span>
+                        <span class="value <%= enrollmentStatus.biometrics.fingerprint.enrolled ? 'enrolled-text' : '' %>">
+                            <%= enrollmentStatus.biometrics.fingerprint.enrolled ? '✅ Enrolled' : '❌ Not Enrolled' %>
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Face:</span>
+                        <span class="value <%= enrollmentStatus.biometrics.face.enrolled ? 'enrolled-text' : '' %>">
+                            <%= enrollmentStatus.biometrics.face.enrolled ? '✅ Enrolled' : '❌ Not Enrolled' %>
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Iris:</span>
+                        <span class="value <%= enrollmentStatus.biometrics.iris.enrolled ? 'enrolled-text' : '' %>">
+                            <%= enrollmentStatus.biometrics.iris.enrolled ? '✅ Enrolled' : '❌ Not Enrolled' %>
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Voice:</span>
+                        <span class="value <%= enrollmentStatus.biometrics.voice.enrolled ? 'enrolled-text' : '' %>">
+                            <%= enrollmentStatus.biometrics.voice.enrolled ? '✅ Enrolled' : '❌ Not Enrolled' %>
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Total Enrolled:</span>
+                        <span class="value"><%= enrollmentStatus.totalEnrolled %> / 4</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <h2>📈 Authentication History</h2>
+                <% if (authHistory.length > 0) { %>
+                    <div class="history-table">
+                        <% authHistory.forEach(function(h) { %>
+                            <div class="history-row">
+                                <span class="method-badge <%= h.method %>"><%= h.method %></span>
+                                <span class="confidence-badge <%= h.success ? 'success' : 'failed' %>">
+                                    <%= h.confidence %>%
+                                </span>
+                                <span class="status <%= h.success ? 'success' : 'failed' %>">
+                                    <%= h.success ? '✓ Success' : '✗ Failed' %>
+                                </span>
+                                <span class="timestamp"><%= new Date(h.timestamp).toLocaleString() %></span>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <p>No authentication history available.</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Biometric Authentication Demo</p>
+        </div>
+    </footer>
+</body>
+</html>

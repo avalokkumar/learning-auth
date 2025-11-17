@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span>Biometric Auth</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link">Profile</a>
+                <span class="nav-user">👤 <%= user.username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>🔗 Multi-Modal Authentication</h1>
+
+            <div class="bio metric-demo-card">
+                <div class="biometric-info">
+                    <h2>How It Works</h2>
+                    <p>Multi-modal authentication combines multiple biometric methods for maximum security and accuracy. The system requires at least half of the selected methods to succeed.</p>
+                    <ul>
+                        <li><strong>Security:</strong> Maximum</li>
+                        <li><strong>Accuracy:</strong> > 99.9%</li>
+                        <li><strong>Redundancy:</strong> High</li>
+                        <li><strong>Flexibility:</strong> Adapts to available sensors</li>
+                    </ul>
+                </div>
+
+                <div class="biometric-simulator">
+                    <h2>Select Biometric Methods</h2>
+                    
+                    <div class="biometric-selection">
+                        <label class="biometric-checkbox <%= enrollmentStatus.biometrics.fingerprint.enrolled ? '' : 'disabled' %>">
+                            <input type="checkbox" id="useFinger" <%= enrollmentStatus.biometrics.fingerprint.enrolled ? '' : 'disabled' %>>
+                            <span>👆 Fingerprint</span>
+                            <%= enrollmentStatus.biometrics.fingerprint.enrolled ? '' : '(Not Enrolled)' %>
+                        </label>
+
+                        <label class="biometric-checkbox <%= enrollmentStatus.biometrics.face.enrolled ? '' : 'disabled' %>">
+                            <input type="checkbox" id="useFace" <%= enrollmentStatus.biometrics.face.enrolled ? '' : 'disabled' %>>
+                            <span>😊 Face</span>
+                            <%= enrollmentStatus.biometrics.face.enrolled ? '' : '(Not Enrolled)' %>
+                        </label>
+
+                        <label class="biometric-checkbox <%= enrollmentStatus.biometrics.iris.enrolled ? '' : 'disabled' %>">
+                            <input type="checkbox" id="useIris" <%= enrollmentStatus.biometrics.iris.enrolled ? '' : 'disabled' %>>
+                            <span>👁️ Iris</span>
+                            <%= enrollmentStatus.biometrics.iris.enrolled ? '' : '(Not Enrolled)' %>
+                        </label>
+
+                        <label class="biometric-checkbox <%= enrollmentStatus.biometrics.voice.enrolled ? '' : 'disabled' %>">
+                            <input type="checkbox" id="useVoice" <%= enrollmentStatus.biometrics.voice.enrolled ? '' : 'disabled' %>>
+                            <span>🎤 Voice</span>
+                            <%= enrollmentStatus.biometrics.voice.enrolled ? '' : '(Not Enrolled)' %>
+                        </label>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="authenticateBtn">Authenticate</button>
+                    </div>
+
+                    <div id="progressDisplay" class="progress-display"></div>
+                    <div id="resultDisplay" class="result-display"></div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3>Advantages of Multi-Modal Authentication</h3>
+                <div class="advantages-grid">
+                    <div class="advantage-item">
+                        <span class="adv-icon">🛡️</span>
+                        <strong>Higher Security</strong>
+                        <p>Multiple verification layers make it nearly impossible to spoof</p>
+                    </div>
+                    <div class="advantage-item">
+                        <span class="adv-icon">✓</span>
+                        <strong>Better Accuracy</strong>
+                        <p>Combined confidence scores provide more reliable authentication</p>
+                    </div>
+                    <div class="advantage-item">
+                        <span class="adv-icon">🔄</span>
+                        <strong>Redundancy</strong>
+                        <p>If one method fails, others can still authenticate you</p>
+                    </div>
+                    <div class="advantage-item">
+                        <span class="adv-icon">📊</span>
+                        <strong>Flexibility</strong>
+                        <p>Adapts to different situations and available sensors</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Biometric Authentication Demo</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('authenticateBtn').addEventListener('click', async () => {
+            const useFinger = document.getElementById('useFinger');
+            const useFace = document.getElementById('useFace');
+            const useIris = document.getElementById('useIris');
+            const useVoice = document.getElementById('useVoice');
+
+            const selected = [];
+            if (useFinger && useFinger.checked) selected.push('fingerprint');
+            if (useFace && useFace.checked) selected.push('face');
+            if (useIris && useIris.checked) selected.push('iris');
+            if (useVoice && useVoice.checked) selected.push('voice');
+
+            if (selected.length === 0) {
+                alert('Please select at least one biometric method');
+                return;
+            }
+
+            const progressDisplay = document.getElementById('progressDisplay');
+            const resultDisplay = document.getElementById('resultDisplay');
+            const authBtn = document.getElementById('authenticateBtn');
+
+            authBtn.disabled = true;
+            progressDisplay.innerHTML = '<p class="info">Authenticating with ' + selected.length + ' biometric method(s)...</p>';
+            resultDisplay.innerHTML = '';
+
+            // Prepare biometric data
+            const biometricData = {};
+            if (selected.includes('fingerprint')) biometricData.fingerprint = { simulateSuccess: true };
+            if (selected.includes('face')) biometricData.face = { simulateSuccess: true, livenessCheck: true };
+            if (selected.includes('iris')) biometricData.iris = { simulateSuccess: true };
+            if (selected.includes('voice')) biometricData.voice = { simulateSuccess: true };
+
+            setTimeout(async () => {
+                try {
+                    const response = await fetch('/biometric/verify/multi-modal', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ biometricData })
+                    });
+
+                    const result = await response.json();
+                    progressDisplay.innerHTML = '';
+                    authBtn.disabled = false;
+
+                    if (result.success) {
+                        let details = '<div class="biometric-results">';
+                        result.biometrics.forEach(b => {
+                            details += `
+                                <div class="biometric-result ${b.success ? 'success' : 'failed'}">
+                                    <strong>${b.method}:</strong> ${b.success ? '✓' : '✗'} (${b.confidence}%)
+                                </div>
+                            `;
+                        });
+                        details += '</div>';
+
+                        resultDisplay.innerHTML = `
+                            <div class="alert alert-success">
+                                <strong>✓ Multi-Modal Authentication Successful!</strong>
+                                <p>Average Confidence: ${result.confidence}%</p>
+                                ${details}
+                            </div>
+                        `;
+                    } else {
+                        let details = '<div class="biometric-results">';
+                        result.biometrics.forEach(b => {
+                            details += `
+                                <div class="biometric-result ${b.success ? 'success' : 'failed'}">
+                                    <strong>${b.method}:</strong> ${b.success ? '✓' : '✗'} (${b.confidence}%)
+                                </div>
+                            `;
+                        });
+                        details += '</div>';
+
+                        resultDisplay.innerHTML = `
+                            <div class="alert alert-error">
+                                <strong>✗ Multi-Modal Authentication Failed</strong>
+                                <p>Average Confidence: ${result.confidence}%</p>
+                                ${details}
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    progressDisplay.innerHTML = '';
+                    authBtn.disabled = false;
+                    resultDisplay.innerHTML = '<div class="alert alert-error"><strong>✗ Error</strong> ' + error.message + '</div>';
+                }
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Setup</title><link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand"><span class="logo">🔐</span><span>Certificate Auth</span></div>
+<div class="nav-menu"><a href="/" class="nav-link">Home</a><a href="/cert/setup" class="nav-link active">Setup</a></div></div></nav>
+<div class="main-content"><div class="container"><h1>Certificate Setup Guide</h1>
+<div class="setup-section"><h2>Step 1: Download Certificate</h2><% certificates.forEach(function(cert) { %>
+<div class="cert-download"><h3><%= cert.name %></h3><a href="<%= cert.downloadUrl %>" class="btn btn-primary">Download <%= cert.filename %></a>
+<p>Password: <code>demo123</code></p></div><% }); %></div>
+<div class="setup-section"><h2>Step 2: Install in Browser</h2>
+<h3>Firefox</h3><ol><li>Settings → Privacy & Security → Certificates → View Certificates</li>
+<li>Click "Import" and select the .p12 file</li><li>Enter password: demo123</li><li>Restart browser</li></ol>
+<h3>Chrome</h3><ol><li>Settings → Privacy and security → Security → Manage certificates</li>
+<li>Import the .p12 file</li><li>Enter password: demo123</li><li>Restart browser</li></ol></div>
+<div class="setup-section"><h2>Step 3: Access Application</h2>
+<p>Visit <a href="https://localhost:3003">https://localhost:3003</a></p>
+<p>Accept the security warning and select your certificate when prompted.</p></div>
+</div></div><footer class="footer"><div class="container"><p>&copy; 2024 Certificate Auth Demo</p></div></footer></body></html>

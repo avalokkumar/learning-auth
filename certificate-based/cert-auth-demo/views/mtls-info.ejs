@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>mTLS Info</title><link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand"><span class="logo">🔐</span><span>Certificate Auth</span></div>
+<div class="nav-menu"><a href="/dashboard" class="nav-link">Dashboard</a><a href="/dashboard/profile" class="nav-link">Profile</a>
+<span class="nav-user">🔑 <%= user.commonName %></span><a href="/auth/logout" class="nav-link logout">Logout</a></div></div></nav>
+<div class="main-content"><div class="container"><h1>🤝 Mutual TLS (mTLS) Information</h1>
+<div class="info-card"><h2>TLS Connection Details</h2>
+<div class="info-row"><span class="label">Protocol:</span><span class="value"><%= tlsInfo.protocol %></span></div>
+<div class="info-row"><span class="label">Cipher Suite:</span><span class="value"><%= tlsInfo.cipher.name %></span></div>
+<div class="info-row"><span class="label">Cipher Version:</span><span class="value"><%= tlsInfo.cipher.version %></span></div>
+<div class="info-row"><span class="label">Client Authorized:</span><span class="value <%= tlsInfo.authorized ? 'success' : 'failed' %>"><%= tlsInfo.authorized ? '✅ Yes' : '❌ No' %></span></div>
+</div>
+<div class="info-card"><h2>What is mTLS?</h2>
+<p>Mutual TLS (mTLS) is a security protocol where both client and server authenticate each other using certificates.</p>
+<ul><li>Server presents its certificate to prove identity</li><li>Client presents its certificate to prove identity</li>
+<li>Both parties verify the other's certificate</li><li>Encrypted communication established</li></ul>
+</div></div></div><footer class="footer"><div class="container"><p>&copy; 2024 Certificate Auth Demo</p></div></footer></body></html>

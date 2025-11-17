@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span>Biometric Auth</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link">Profile</a>
+                <span class="nav-user">👤 <%= user.username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>👁️ Iris Scanning</h1>
+
+            <div class="biometric-demo-card">
+                <div class="biometric-info">
+                    <h2>How It Works</h2>
+                    <p>Iris scanning analyzes the unique patterns in the colored ring around your pupil. It's one of the most accurate biometric methods available.</p>
+                    <ul>
+                        <li><strong>Speed:</strong> 2-3 seconds</li>
+                        <li><strong>Accuracy:</strong> 99.999%</li>
+                        <li><strong>Type:</strong> Physical Biometric</li>
+                        <li><strong>Security:</strong> Highest</li>
+                    </ul>
+                </div>
+
+                <div class="biometric-simulator">
+                    <h2><%= enrolled ? 'Verify Iris' : 'Enroll Iris' %></h2>
+                    <div class="iris-scanner" id="irisScanner">
+                        <div class="iris-display">
+                            <div class="iris-icon">👁️</div>
+                            <div class="iris-rings">
+                                <div class="ring ring-1"></div>
+                                <div class="ring ring-2"></div>
+                                <div class="ring ring-3"></div>
+                            </div>
+                        </div>
+                        <p class="scan-instruction">Look at the scanner</p>
+                    </div>
+
+                    <div class="action-buttons">
+                        <% if (!enrolled) { %>
+                            <button class="btn btn-primary" id="enrollBtn">Enroll Iris</button>
+                        <% } else { %>
+                            <button class="btn btn-primary" id="verifyBtn">Verify Iris</button>
+                        <% } %>
+                    </div>
+
+                    <div id="resultDisplay" class="result-display"></div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3>Real-World Applications</h3>
+                <div class="application-grid">
+                    <div class="application-item">
+                        <span class="app-icon">🏛️</span>
+                        <strong>Government</strong>
+                        <p>High-security facilities, classified areas</p>
+                    </div>
+                    <div class="application-item">
+                        <span class="app-icon">💎</span>
+                        <strong>Banking</strong>
+                        <p>Bank vaults, treasury access</p>
+                    </div>
+                    <div class="application-item">
+                        <span class="app-icon">✈️</span>
+                        <strong>Airports</strong>
+                        <p>Border control, restricted area access</p>
+                    </div>
+                    <div class="application-item">
+                        <span class="app-icon">🔬</span>
+                        <strong>Research</strong>
+                        <p>Laboratory security, data centers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Biometric Authentication Demo</p>
+        </div>
+    </footer>
+
+    <script>
+        const enrolled = <%= enrolled ? 'true' : 'false' %>;
+        const scanner = document.getElementById('irisScanner');
+        const resultDisplay = document.getElementById('resultDisplay');
+
+        <% if (!enrolled) { %>
+            document.getElementById('enrollBtn').addEventListener('click', async () => {
+                scanner.classList.add('scanning');
+                resultDisplay.innerHTML = '<p class="info">Scanning iris pattern...</p>';
+
+                setTimeout(async () => {
+                    try {
+                        const response = await fetch('/biometric/enroll/iris', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                irisData: { eye: 'both', quality: 98 }
+                            })
+                        });
+
+                        const result = await response.json();
+                        scanner.classList.remove('scanning');
+
+                        if (result.success) {
+                            resultDisplay.innerHTML = '<div class="alert alert-success"><strong>✓ Success!</strong> Iris pattern enrolled. Redirecting...</div>';
+                            setTimeout(() => window.location.reload(), 2000);
+                        } else {
+                            resultDisplay.innerHTML = '<div class="alert alert-error"><strong>✗ Failed</strong> ' + (result.error || 'Enrollment failed') + '</div>';
+                        }
+                    } catch (error) {
+                        scanner.classList.remove('scanning');
+                        resultDisplay.innerHTML = '<div class="alert alert-error"><strong>✗ Error</strong> ' + error.message + '</div>';
+                    }
+                }, 3000);
+            });
+        <% } else { %>
+            document.getElementById('verifyBtn').addEventListener('click', async () => {
+                scanner.classList.add('scanning');
+                resultDisplay.innerHTML = '<p class="info">Verifying iris pattern...</p>';
+
+                setTimeout(async () => {
+                    try {
+                        const response = await fetch('/biometric/verify/iris', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                irisData: { simulateSuccess: true }
+                            })
+                        });
+
+                        const result = await response.json();
+                        scanner.classList.remove('scanning');
+
+                        if (result.success) {
+                            resultDisplay.innerHTML = `
+                                <div class="alert alert-success">
+                                    <strong>✓ Verified!</strong> Confidence: ${result.confidence}%
+                                    <p>${result.message}</p>
+                                </div>
+                            `;
+                        } else {
+                            resultDisplay.innerHTML = `
+                                <div class="alert alert-error">
+                                    <strong>✗ Failed</strong> Confidence: ${result.confidence}%
+                                    <p>${result.message || result.error}</p>
+                                </div>
+                            `;
+                        }
+                    } catch (error) {
+                        scanner.classList.remove('scanning');
+                        resultDisplay.innerHTML = '<div class="alert alert-error"><strong>✗ Error</strong> ' + error.message + '</div>';
+                    }
+                }, 3000);
+            });
+        <% } %>
+    </script>
+</body>
+</html>

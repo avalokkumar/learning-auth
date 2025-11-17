@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span>Biometric Auth</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link">Profile</a>
+                <span class="nav-user">👤 <%= user.username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>🎤 Voice Recognition</h1>
+
+            <div class="biometric-demo-card">
+                <div class="biometric-info">
+                    <h2>How It Works</h2>
+                    <p>Voice recognition analyzes your unique vocal characteristics including pitch, tone, rhythm, and accent patterns to create a voice print.</p>
+                    <ul>
+                        <li><strong>Speed:</strong> 3-5 seconds</li>
+                        <li><strong>Accuracy:</strong> 85-90%</li>
+                        <li><strong>Type:</strong> Behavioral Biometric</li>
+                        <li><strong>Hands-Free:</strong> Yes</li>
+                    </ul>
+                </div>
+
+                <div class="biometric-simulator">
+                    <h2><%= enrolled ? 'Verify Voice' : 'Enroll Voice' %></h2>
+                    <div class="voice-scanner" id="voiceScanner">
+                        <div class="voice-display">
+                            <div class="voice-icon">🎤</div>
+                            <div class="waveform">
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                            </div>
+                        </div>
+                        <p class="scan-instruction">Say: "My voice is my password"</p>
+                    </div>
+
+                    <div class="action-buttons">
+                        <% if (!enrolled) { %>
+                            <button class="btn btn-primary" id="enrollBtn">Enroll Voice</button>
+                        <% } else { %>
+                            <button class="btn btn-primary" id="verifyBtn">Verify Voice</button>
+                        <% } %>
+                    </div>
+
+                    <div id="resultDisplay" class="result-display"></div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3>Real-World Applications</h3>
+                <div class="application-grid">
+                    <div class="application-item">
+                        <span class="app-icon">📞</span>
+                        <strong>Phone Banking</strong>
+                        <p>Customer verification over the phone</p>
+                    </div>
+                    <div class="application-item">
+                        <span class="app-icon">🏠</span>
+                        <strong>Smart Home</strong>
+                        <p>Alexa, Google Home, voice assistants</p>
+                    </div>
+                    <div class="application-item">
+                        <span class="app-icon">🚗</span>
+                        <strong>Automotive</strong>
+                        <p>In-car voice commands and authentication</p>
+                    </div>
+                    <div class="application-item">
+                        <span class="app-icon">🏦</span>
+                        <strong>Call Centers</strong>
+                        <p>Customer service verification</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Biometric Authentication Demo</p>
+        </div>
+    </footer>
+
+    <script>
+        const enrolled = <%= enrolled ? 'true' : 'false' %>;
+        const scanner = document.getElementById('voiceScanner');
+        const resultDisplay = document.getElementById('resultDisplay');
+
+        <% if (!enrolled) { %>
+            document.getElementById('enrollBtn').addEventListener('click', async () => {
+                scanner.classList.add('recording');
+                resultDisplay.innerHTML = '<p class="info">Recording voice print...</p>';
+
+                setTimeout(async () => {
+                    try {
+                        const response = await fetch('/biometric/enroll/voice', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                voiceData: { passphrase: 'my voice is my password', quality: 85 }
+                            })
+                        });
+
+                        const result = await response.json();
+                        scanner.classList.remove('recording');
+
+                        if (result.success) {
+                            resultDisplay.innerHTML = '<div class="alert alert-success"><strong>✓ Success!</strong> Voice print enrolled. Redirecting...</div>';
+                            setTimeout(() => window.location.reload(), 2000);
+                        } else {
+                            resultDisplay.innerHTML = '<div class="alert alert-error"><strong>✗ Failed</strong> ' + (result.error || 'Enrollment failed') + '</div>';
+                        }
+                    } catch (error) {
+                        scanner.classList.remove('recording');
+                        resultDisplay.innerHTML = '<div class="alert alert-error"><strong>✗ Error</strong> ' + error.message + '</div>';
+                    }
+                }, 3500);
+            });
+        <% } else { %>
+            document.getElementById('verifyBtn').addEventListener('click', async () => {
+                scanner.classList.add('recording');
+                resultDisplay.innerHTML = '<p class="info">Verifying voice print...</p>';
+
+                setTimeout(async () => {
+                    try {
+                        const response = await fetch('/biometric/verify/voice', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                voiceData: { simulateSuccess: true, passphrase: 'my voice is my password' }
+                            })
+                        });
+
+                        const result = await response.json();
+                        scanner.classList.remove('recording');
+
+                        if (result.success) {
+                            resultDisplay.innerHTML = `
+                                <div class="alert alert-success">
+                                    <strong>✓ Verified!</strong> Confidence: ${result.confidence}%
+                                    <p>${result.message}</p>
+                                </div>
+                            `;
+                        } else {
+                            resultDisplay.innerHTML = `
+                                <div class="alert alert-error">
+                                    <strong>✗ Failed</strong> Confidence: ${result.confidence}%
+                                    <p>${result.message || result.error}</p>
+                                </div>
+                            `;
+                        }
+                    } catch (error) {
+                        scanner.classList.remove('recording');
+                        resultDisplay.innerHTML = '<div class="alert alert-error"><strong>✗ Error</strong> ' + error.message + '</div>';
+                    }
+                }, 3500);
+            });
+        <% } %>
+    </script>
+</body>
+</html>

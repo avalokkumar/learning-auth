@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span>Biometric Auth</span>
+            </div>
+            <div class="nav-menu">
+                <% if (user) { %>
+                    <a href="/dashboard" class="nav-link">Dashboard</a>
+                    <a href="/dashboard/profile" class="nav-link">Profile</a>
+                    <span class="nav-user">👤 <%= user %></span>
+                    <a href="/auth/logout" class="nav-link logout">Logout</a>
+                <% } else { %>
+                    <a href="/" class="nav-link active">Home</a>
+                    <a href="/auth/login" class="nav-link">Login</a>
+                <% } %>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container">
+            <h1 class="hero-title">🔐 Biometric Authentication Demo</h1>
+            <p class="hero-subtitle">Experience the future of secure authentication using your unique physical and behavioral characteristics</p>
+            <div class="cta">
+                <% if (user) { %>
+                    <a href="/dashboard" class="btn btn-primary btn-large">Go to Dashboard</a>
+                <% } else { %>
+                    <a href="/auth/login" class="btn btn-primary btn-large">Try Demo Login</a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="features">
+            <div class="feature-card">
+                <span class="feature-icon">👆</span>
+                <h3>Fingerprint Recognition</h3>
+                <p>Fast, accurate authentication using unique ridge patterns on your fingertips. 99.8% accuracy in under 1 second.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">😊</span>
+                <h3>Face Recognition</h3>
+                <p>3D facial mapping with liveness detection. Contactless and convenient authentication method.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">👁️</span>
+                <h3>Iris Scanning</h3>
+                <p>Highest security biometric with 99.999% accuracy. Scans unique patterns in the colored part of your eye.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🎤</span>
+                <h3>Voice Recognition</h3>
+                <p>Hands-free authentication using your unique voice characteristics - pitch, tone, rhythm, and accent.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🔗</span>
+                <h3>Multi-Modal Authentication</h3>
+                <p>Combine multiple biometric methods for enhanced security and accuracy.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🛡️</span>
+                <h3>Secure & Private</h3>
+                <p>Biometric templates stored securely. Original biometric data is never saved.</p>
+            </div>
+        </div>
+
+        <div class="test-accounts">
+            <h2>🔑 Test Accounts</h2>
+            <p>Use these credentials to experience biometric authentication:</p>
+            <div class="account-list">
+                <div class="account-item">
+                    <strong>Demo User:</strong> <code>demo</code> / <code>demo123</code>
+                </div>
+                <div class="account-item">
+                    <strong>Admin User:</strong> <code>admin</code> / <code>admin123</code>
+                </div>
+            </div>
+            <div class="note">
+                <strong>📝 Note:</strong> After logging in, you can enroll your biometric templates and test authentication with different methods.
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Login</h3>
+                    <p>Start with traditional password login</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Enroll Biometrics</h3>
+                    <p>Register your fingerprint, face, iris, or voice</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Authenticate</h3>
+                    <p>Use biometrics to quickly verify your identity</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Secure Access</h3>
+                    <p>Enjoy fast, secure, passwordless authentication</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="use-cases">
+            <h2>Industry Applications</h2>
+            <div class="use-case-grid">
+                <div class="use-case">
+                    <span class="icon">🏦</span>
+                    <h3>Banking</h3>
+                    <p>Mobile banking apps, ATM access, transaction approval</p>
+                </div>
+                <div class="use-case">
+                    <span class="icon">🏥</span>
+                    <h3>Healthcare</h3>
+                    <p>Electronic health records, prescription access, patient identification</p>
+                </div>
+                <div class="use-case">
+                    <span class="icon">🏢</span>
+                    <h3>Enterprise</h3>
+                    <p>Building access, computer login, time tracking</p>
+                </div>
+                <div class="use-case">
+                    <span class="icon">🛂</span>
+                    <h3>Border Control</h3>
+                    <p>Airport security, passport verification, visa processing</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Biometric Authentication Demo | Educational Purpose Only</p>
+        </div>
+    </footer>
+
+    <script>
+        console.log('🔐 Biometric Authentication Demo');
+        console.log('Explore various biometric authentication methods');
+    </script>
+</body>
+</html>

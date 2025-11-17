@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Auth Error</title><link rel="stylesheet" href="/css/style.css"></head>
+<body><div class="error-container"><h1 class="error-code">🔐</h1><h2>Authentication Failed</h2>
+<p><strong>Error:</strong> <%= error %></p><p><strong>Reason:</strong> <%= reason %></p>
+<div class="error-help"><h3>Troubleshooting Steps:</h3><ol>
+<li>Ensure you have imported a client certificate</li>
+<li>Verify the certificate is valid and not expired</li>
+<li>Restart your browser after importing the certificate</li>
+<li>Select the correct certificate when prompted</li></ol></div>
+<a href="/cert/setup" class="btn btn-primary">Setup Certificate</a>
+<a href="/" class="btn btn-secondary">Go Home</a></div></body></html>

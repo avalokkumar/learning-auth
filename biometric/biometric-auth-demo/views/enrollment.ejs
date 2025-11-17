@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span>Biometric Auth</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link">Profile</a>
+                <a href="/dashboard/enrollment" class="nav-link active">Enrollment</a>
+                <span class="nav-user">👤 <%= user.username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>📋 Enrollment Center</h1>
+            <p class="subtitle">Enroll your biometric templates to enable passwordless authentication</p>
+
+            <div class="enrollment-progress">
+                <h2>Enrollment Progress: <%= enrollmentStatus.totalEnrolled %> / 4</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: <%= (enrollmentStatus.totalEnrolled / 4) * 100 %>%"></div>
+                </div>
+            </div>
+
+            <div class="enrollment-cards">
+                <div class="enroll-card <%= enrollmentStatus.biometrics.fingerprint.enrolled ? 'enrolled' : '' %>">
+                    <div class="enroll-header">
+                        <span class="enroll-icon">👆</span>
+                        <h3>Fingerprint</h3>
+                        <% if (enrollmentStatus.biometrics.fingerprint.enrolled) { %>
+                            <span class="badge badge-success">✓ Enrolled</span>
+                        <% } else { %>
+                            <span class="badge badge-pending">Pending</span>
+                        <% } %>
+                    </div>
+                    <div class="enroll-body">
+                        <p>Fast and accurate authentication using your unique fingerprint pattern.</p>
+                        <ul class="specs">
+                            <li>Speed: < 1 second</li>
+                            <li>Accuracy: 99.8%</li>
+                        </ul>
+                    </div>
+                    <div class="enroll-footer">
+                        <a href="/dashboard/fingerprint" class="btn <%= enrollmentStatus.biometrics.fingerprint.enrolled ? 'btn-secondary' : 'btn-primary' %>">
+                            <%= enrollmentStatus.biometrics.fingerprint.enrolled ? 'Test' : 'Enroll Now' %>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="enroll-card <%= enrollmentStatus.biometrics.face.enrolled ? 'enrolled' : '' %>">
+                    <div class="enroll-header">
+                        <span class="enroll-icon">😊</span>
+                        <h3>Face Recognition</h3>
+                        <% if (enrollmentStatus.biometrics.face.enrolled) { %>
+                            <span class="badge badge-success">✓ Enrolled</span>
+                        <% } else { %>
+                            <span class="badge badge-pending">Pending</span>
+                        <% } %>
+                    </div>
+                    <div class="enroll-body">
+                        <p>Contactless 3D face mapping with liveness detection.</p>
+                        <ul class="specs">
+                            <li>Speed: 1-2 seconds</li>
+                            <li>Accuracy: 95-99%</li>
+                        </ul>
+                    </div>
+                    <div class="enroll-footer">
+                        <a href="/dashboard/face" class="btn <%= enrollmentStatus.biometrics.face.enrolled ? 'btn-secondary' : 'btn-primary' %>">
+                            <%= enrollmentStatus.biometrics.face.enrolled ? 'Test' : 'Enroll Now' %>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="enroll-card <%= enrollmentStatus.biometrics.iris.enrolled ? 'enrolled' : '' %>">
+                    <div class="enroll-header">
+                        <span class="enroll-icon">👁️</span>
+                        <h3>Iris Scanning</h3>
+                        <% if (enrollmentStatus.biometrics.iris.enrolled) { %>
+                            <span class="badge badge-success">✓ Enrolled</span>
+                        <% } else { %>
+                            <span class="badge badge-pending">Pending</span>
+                        <% } %>
+                    </div>
+                    <div class="enroll-body">
+                        <p>Highest accuracy biometric using unique iris patterns.</p>
+                        <ul class="specs">
+                            <li>Speed: 2-3 seconds</li>
+                            <li>Accuracy: 99.999%</li>
+                        </ul>
+                    </div>
+                    <div class="enroll-footer">
+                        <a href="/dashboard/iris" class="btn <%= enrollmentStatus.biometrics.iris.enrolled ? 'btn-secondary' : 'btn-primary' %>">
+                            <%= enrollmentStatus.biometrics.iris.enrolled ? 'Test' : 'Enroll Now' %>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="enroll-card <%= enrollmentStatus.biometrics.voice.enrolled ? 'enrolled' : '' %>">
+                    <div class="enroll-header">
+                        <span class="enroll-icon">🎤</span>
+                        <h3>Voice Recognition</h3>
+                        <% if (enrollmentStatus.biometrics.voice.enrolled) { %>
+                            <span class="badge badge-success">✓ Enrolled</span>
+                        <% } else { %>
+                            <span class="badge badge-pending">Pending</span>
+                        <% } %>
+                    </div>
+                    <div class="enroll-body">
+                        <p>Hands-free authentication using your unique voice characteristics.</p>
+                        <ul class="specs">
+                            <li>Speed: 3-5 seconds</li>
+                            <li>Accuracy: 85-90%</li>
+                        </ul>
+                    </div>
+                    <div class="enroll-footer">
+                        <a href="/dashboard/voice" class="btn <%= enrollmentStatus.biometrics.voice.enrolled ? 'btn-secondary' : 'btn-primary' %>">
+                            <%= enrollmentStatus.biometrics.voice.enrolled ? 'Test' : 'Enroll Now' %>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <% if (enrollmentStatus.totalEnrolled >= 2) { %>
+                <div class="multi-modal-cta">
+                    <h2>🔗 Ready for Multi-Modal Authentication!</h2>
+                    <p>You've enrolled <%= enrollmentStatus.totalEnrolled %> biometric methods. Try combining them for maximum security.</p>
+                    <a href="/dashboard/multi-modal" class="btn btn-primary btn-large">Try Multi-Modal Auth</a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Biometric Authentication Demo</p>
+        </div>
+    </footer>
+</body>
+</html>

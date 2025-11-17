@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Validate</title><link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand"><span class="logo">🔐</span><span>Certificate Auth</span></div>
+<div class="nav-menu"><a href="/dashboard" class="nav-link">Dashboard</a><a href="/dashboard/profile" class="nav-link">Profile</a>
+<span class="nav-user">🔑 <%= user.commonName %></span><a href="/auth/logout" class="nav-link logout">Logout</a></div></div></nav>
+<div class="main-content"><div class="container"><h1>✅ Certificate Validation</h1>
+<div class="validation-result <%= verification.valid ? 'success' : 'error' %>">
+<% if (verification.valid) { %>
+<h2>✅ Certificate is Valid</h2>
+<p>Your certificate has been successfully verified against the Certificate Authority.</p>
+<div class="info-row"><span class="label">Subject:</span><span class="value"><%= verification.subject %></span></div>
+<div class="info-row"><span class="label">Email:</span><span class="value"><%= verification.email %></span></div>
+<% } else { %>
+<h2>❌ Validation Failed</h2>
+<p><%= verification.error %></p>
+<% } %>
+</div>
+<div class="info-card"><h2>Certificate Information</h2>
+<div class="info-row"><span class="label">Subject:</span><span class="value"><%= certificate.subject.CN %></span></div>
+<div class="info-row"><span class="label">Issuer:</span><span class="value"><%= certificate.issuer.CN %></span></div>
+<div class="info-row"><span class="label">Valid From:</span><span class="value"><%= certificate.validFrom %></span></div>
+<div class="info-row"><span class="label">Valid To:</span><span class="value"><%= certificate.validTo %></span></div>
+</div></div></div><footer class="footer"><div class="container"><p>&copy; 2024 Certificate Auth Demo</p></div></footer></body></html>
