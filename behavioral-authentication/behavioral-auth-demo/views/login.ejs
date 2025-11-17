@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🧠</span>
+                <span>Behavioral Auth</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/" class="nav-link">Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1 class="auth-title">🔐 Login with Behavioral Auth</h1>
+
+            <div id="tracking-status" class="tracking-indicator">
+                <span class="status-dot"></span>
+                <span class="status-text">Tracking your behavioral patterns...</span>
+            </div>
+
+            <% if (error) { %>
+                <div class="alert alert-error">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <% if (message) { %>
+                <div class="alert alert-success">
+                    <%= message %>
+                </div>
+            <% } %>
+
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required 
+                           placeholder="Enter your username" autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required 
+                           placeholder="Enter your password" autocomplete="current-password">
+                    <small>💡 Type naturally - we're learning your typing rhythm</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full" id="loginBtn">
+                    Login
+                </button>
+            </form>
+
+            <div class="behavioral-info">
+                <h3>🧠 What We're Tracking:</h3>
+                <ul>
+                    <li><strong>Keystroke Dynamics:</strong> Your typing rhythm and speed</li>
+                    <li><strong>Dwell Time:</strong> How long you hold each key</li>
+                    <li><strong>Flight Time:</strong> Time between keystrokes</li>
+                    <li><strong>Mouse Patterns:</strong> How you move the cursor</li>
+                </ul>
+                <p class="privacy-note">
+                    <strong>Privacy:</strong> All behavioral data is used only for authentication 
+                    and is not stored permanently. This is a demo environment.
+                </p>
+            </div>
+
+            <div class="test-hint">
+                <strong>Test Accounts:</strong><br>
+                <code>demo/demo123</code> or <code>admin/admin123</code>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Behavioral Authentication Demo | Educational Purpose Only</p>
+        </div>
+    </footer>
+
+    <script src="/js/behavioral-tracker.js"></script>
+    <script>
+        // Initialize behavioral tracker
+        const tracker = new BehavioralTracker({
+            skipPasswordKeys: false, // Track password field for rhythm analysis
+            continuousMode: false // Don't send during login
+        });
+
+        // Start tracking when page loads
+        tracker.startTracking();
+
+        // Update tracking status
+        const statusDot = document.querySelector('.status-dot');
+        const statusText = document.querySelector('.status-text');
+
+        setInterval(() => {
+            const summary = tracker.getSummary();
+            statusText.textContent = `Tracking: ${summary.keystrokeCount} keystrokes, ${summary.mouseEventCount} mouse events`;
+            statusDot.classList.add('active');
+        }, 1000);
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const loginBtn = document.getElementById('loginBtn');
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Analyzing behavior...';
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Get behavioral data
+            const behavioralData = tracker.getData();
+
+            console.log('📊 Behavioral data collected:', {
+                keystrokes: behavioralData.keystrokeData.length,
+                mouseEvents: behavioralData.mouseData.length,
+                touchEvents: behavioralData.touchData.length
+            });
+
+            try {
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username,
+                        password,
+                        behavioralData
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Show learning phase message if applicable
+                    if (result.isLearningPhase) {
+                        alert('🎓 Learning Phase: Building your behavioral profile...\nComplete 2 more sessions for full authentication.');
+                    }
+
+                    // Show confidence assessment if available
+                    if (result.confidenceAssessment) {
+                        console.log('Confidence Score:', result.confidenceAssessment.score);
+                        console.log('Confidence Level:', result.confidenceAssessment.confidence);
+                    }
+
+                    // Redirect to dashboard
+                    window.location.href = result.redirect;
+                } else {
+                    // Show error
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'alert alert-error';
+                    errorDiv.textContent = result.error;
+                    
+                    const form = document.getElementById('loginForm');
+                    form.insertBefore(errorDiv, form.firstChild);
+
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'Login';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('An error occurred during login. Please try again.');
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Login';
+            }
+        });
+
+        // Show behavioral stats on console
+        setInterval(() => {
+            const data = tracker.getData();
+            if (data.keystrokeData.length > 0) {
+                console.log('📈 Behavioral Stats:', tracker.getSummary());
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

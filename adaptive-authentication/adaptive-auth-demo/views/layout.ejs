@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - Adaptive Auth Demo</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span class="brand-text">Adaptive Auth Demo</span>
+            </div>
+            <% if (typeof username !== 'undefined') { %>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link">Profile</a>
+                <a href="/dashboard/transfer" class="nav-link">Transfer</a>
+                <a href="/dashboard/settings" class="nav-link">Settings</a>
+                <a href="/dashboard/risk-analysis" class="nav-link">Risk Analysis</a>
+                <span class="nav-user">👤 <%= username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+            <% } %>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <%- body %>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Adaptive Authentication Demo | Educational Purpose Only</p>
+        </div>
+    </footer>
+</body>
+</html>

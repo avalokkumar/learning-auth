@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span class="brand-text">Adaptive Auth Demo</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link">Profile</a>
+                <a href="/dashboard/transfer" class="nav-link">Transfer</a>
+                <a href="/dashboard/settings" class="nav-link">Settings</a>
+                <a href="/dashboard/risk-analysis" class="nav-link active">Risk Analysis</a>
+                <span class="nav-user">👤 <%= username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <h1>📊 Risk Analysis</h1>
+        
+        <div class="analysis-grid">
+            <div class="analysis-card">
+                <h2>Current Risk Assessment</h2>
+                <div class="risk-score-large risk-<%= riskAssessment.level.toLowerCase() %>">
+                    <div class="score-number"><%= riskAssessment.score %></div>
+                    <div class="score-label"><%= riskAssessment.level %></div>
+                </div>
+                <p class="risk-message"><%= riskAssessment.recommendation.message %></p>
+            </div>
+
+            <div class="analysis-card">
+                <h2>Risk Score Breakdown</h2>
+                <div class="risk-breakdown">
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Device Risk:</span>
+                        <div class="breakdown-bar">
+                            <div class="breakdown-fill" style="width: <%= riskAssessment.breakdown.device %>%"></div>
+                        </div>
+                        <span class="breakdown-value"><%= Math.round(riskAssessment.breakdown.device) %>%</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Location Risk:</span>
+                        <div class="breakdown-bar">
+                            <div class="breakdown-fill" style="width: <%= riskAssessment.breakdown.location %>%"></div>
+                        </div>
+                        <span class="breakdown-value"><%= Math.round(riskAssessment.breakdown.location) %>%</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Time Risk:</span>
+                        <div class="breakdown-bar">
+                            <div class="breakdown-fill" style="width: <%= riskAssessment.breakdown.time %>%"></div>
+                        </div>
+                        <span class="breakdown-value"><%= Math.round(riskAssessment.breakdown.time) %>%</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Behavioral Risk:</span>
+                        <div class="breakdown-bar">
+                            <div class="breakdown-fill" style="width: <%= riskAssessment.breakdown.behavioral %>%"></div>
+                        </div>
+                        <span class="breakdown-value"><%= Math.round(riskAssessment.breakdown.behavioral) %>%</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Historical Risk:</span>
+                        <div class="breakdown-bar">
+                            <div class="breakdown-fill" style="width: <%= riskAssessment.breakdown.historical %>%"></div>
+                        </div>
+                        <span class="breakdown-value"><%= Math.round(riskAssessment.breakdown.historical) %>%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analysis-card">
+                <h2>Top Risk Factors</h2>
+                <ul class="risk-factors-list">
+                    <% riskAssessment.factors.forEach(factor => { %>
+                        <li>
+                            <strong><%= factor.factor %>:</strong>
+                            <span class="factor-score"><%= Math.round(factor.score) %>/100</span>
+                        </li>
+                    <% }); %>
+                </ul>
+            </div>
+
+            <div class="analysis-card">
+                <h2>Location Information</h2>
+                <% if (geoip) { %>
+                    <div class="info-row">
+                        <span class="label">Country:</span>
+                        <span class="value"><%= geoip.country || 'Unknown' %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">City:</span>
+                        <span class="value"><%= geoip.city || 'Unknown' %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Region:</span>
+                        <span class="value"><%= geoip.region || 'Unknown' %></span>
+                    </div>
+                <% } else { %>
+                    <p>Location information not available</p>
+                <% } %>
+            </div>
+
+            <div class="analysis-card">
+                <h2>User Profile</h2>
+                <div class="info-row">
+                    <span class="label">Total Logins:</span>
+                    <span class="value"><%= profile.loginCount || 0 %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Known Devices:</span>
+                    <span class="value"><%= (profile.knownDevices || []).length %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Known Locations:</span>
+                    <span class="value"><%= (profile.knownLocations || []).length %></span>
+                </div>
+            </div>
+
+            <div class="analysis-card">
+                <h2>Recent Login Attempts</h2>
+                <% if (loginAttempts && loginAttempts.length > 0) { %>
+                    <ul class="attempts-list">
+                        <% loginAttempts.forEach(attempt => { %>
+                            <li>
+                                <span class="attempt-status <%= attempt.success ? 'success' : 'failed' %>">
+                                    <%= attempt.success ? '✓' : '✗' %>
+                                </span>
+                                <%= new Date(attempt.timestamp).toLocaleString() %>
+                            </li>
+                        <% }); %>
+                    </ul>
+                <% } else { %>
+                    <p>No recent login attempts</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Adaptive Authentication Demo | Educational Purpose Only</p>
+        </div>
+    </footer>
+</body>
+</html>

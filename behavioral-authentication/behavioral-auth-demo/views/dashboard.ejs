@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🧠</span>
+                <span>Behavioral Auth</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link active">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link">Profile</a>
+                <a href="/dashboard/analysis" class="nav-link">Analysis</a>
+                <span class="nav-user">👤 <%= user.username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>Welcome, <%= user.fullName %>!</h1>
+
+            <% if (isLearningPhase) { %>
+                <div class="alert alert-warning">
+                    <strong>🎓 Learning Phase Active</strong><br>
+                    We're building your behavioral profile. Complete <%= sessionsNeeded %> more sessions for full continuous authentication.
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: <%= ((3 - sessionsNeeded) / 3 * 100) %>%"></div>
+                    </div>
+                </div>
+            <% } %>
+
+            <div id="confidence-display" class="confidence-card">
+                <h2>Current Confidence Score</h2>
+                <div class="confidence-score" id="confidenceScore">
+                    <div class="score-circle">
+                        <span class="score-value">--</span>
+                    </div>
+                    <div class="score-label">Calculating...</div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h2>📊 Session Info</h2>
+                    <div class="info-row">
+                        <span class="label">Total Sessions:</span>
+                        <span class="value"><%= profile.totalSessions %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Keystroke Samples:</span>
+                        <span class="value"><%= profile.keystrokeDynamics.samples.length %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Mouse Samples:</span>
+                        <span class="value"><%= profile.mouseDynamics.samples.length %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Touch Samples:</span>
+                        <span class="value"><%= profile.touchDynamics.samples.length %></span>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <h2>📈 Recent Confidence</h2>
+                    <% if (recentHistory.length > 0) { %>
+                        <div class="history-list">
+                            <% recentHistory.slice(0, 5).forEach(function(h) { %>
+                                <div class="history-item">
+                                    <span class="confidence-badge confidence-<%= h.confidence.toLowerCase() %>">
+                                        <%= h.score %>
+                                    </span>
+                                    <span class="timestamp"><%= new Date(h.timestamp).toLocaleTimeString() %></span>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } else { %>
+                        <p>No history yet. Interact with the system to generate data.</p>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="action-grid">
+                <h2>Test Behavioral Features</h2>
+                <a href="/dashboard/typing-test" class="action-card">
+                    <span class="action-icon">⌨️</span>
+                    <h3>Typing Test</h3>
+                    <p>Test and improve your keystroke profile</p>
+                </a>
+
+                <a href="/dashboard/mouse-test" class="action-card">
+                    <span class="action-icon">🖱️</span>
+                    <h3>Mouse Test</h3>
+                    <p>Track your mouse movement patterns</p>
+                </a>
+
+                <a href="/dashboard/touch-test" class="action-card">
+                    <span class="action-icon">📱</span>
+                    <h3>Touch Test</h3>
+                    <p>Test touch gesture recognition</p>
+                </a>
+
+                <a href="/dashboard/continuous-auth" class="action-card">
+                    <span class="action-icon">🔄</span>
+                    <h3>Continuous Auth</h3>
+                    <p>Experience real-time monitoring</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Behavioral Authentication Demo</p>
+        </div>
+    </footer>
+
+    <script src="/js/behavioral-tracker.js"></script>
+    <script>
+        const tracker = new BehavioralTracker({
+            continuousMode: true,
+            sendInterval: 15000
+        });
+        tracker.startTracking();
+
+        document.addEventListener('behavioralAssessment', (e) => {
+            const assessment = e.detail;
+            updateConfidenceDisplay(assessment);
+        });
+
+        function updateConfidenceDisplay(assessment) {
+            const scoreValue = document.querySelector('.score-value');
+            const scoreLabel = document.querySelector('.score-label');
+            const scoreCircle = document.querySelector('.score-circle');
+
+            scoreValue.textContent = assessment.score;
+            scoreLabel.textContent = assessment.level;
+
+            scoreCircle.className = 'score-circle confidence-' + assessment.confidence.toLowerCase();
+        }
+
+        document.addEventListener('requiresReauth', (e) => {
+            if (confirm('Your behavioral pattern has changed significantly. Would you like to re-authenticate?')) {
+                window.location.href = '/dashboard/continuous-auth';
+            }
+        });
+    </script>
+</body>
+</html>

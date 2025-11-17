@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🧠</span>
+                <span>Behavioral Auth</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link active">Profile</a>
+                <a href="/dashboard/analysis" class="nav-link">Analysis</a>
+                <span class="nav-user">👤 <%= user.username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>Your Behavioral Profile</h1>
+
+            <div class="profile-grid">
+                <div class="profile-card">
+                    <h2>👤 Account Info</h2>
+                    <div class="info-row">
+                        <span class="label">Username:</span>
+                        <span class="value"><%= user.username %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Full Name:</span>
+                        <span class="value"><%= user.fullName %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Email:</span>
+                        <span class="value"><%= user.email %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Login Time:</span>
+                        <span class="value"><%= loginTime.toLocaleString() %></span>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <h2>⌨️ Keystroke Profile</h2>
+                    <% if (profile.keystrokeDynamics.avgDwellTime) { %>
+                        <div class="info-row">
+                            <span class="label">Avg Dwell Time:</span>
+                            <span class="value"><%= Math.round(profile.keystrokeDynamics.avgDwellTime) %>ms</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Avg Flight Time:</span>
+                            <span class="value"><%= Math.round(profile.keystrokeDynamics.avgFlightTime) %>ms</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Samples Collected:</span>
+                            <span class="value"><%= profile.keystrokeDynamics.samples.length %></span>
+                        </div>
+                    <% } else { %>
+                        <p>No keystroke data yet. Type more to build your profile.</p>
+                    <% } %>
+                </div>
+
+                <div class="profile-card">
+                    <h2>🖱️ Mouse Profile</h2>
+                    <% if (profile.mouseDynamics.avgSpeed) { %>
+                        <div class="info-row">
+                            <span class="label">Avg Speed:</span>
+                            <span class="value"><%= Math.round(profile.mouseDynamics.avgSpeed * 1000) %> px/s</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Samples Collected:</span>
+                            <span class="value"><%= profile.mouseDynamics.samples.length %></span>
+                        </div>
+                    <% } else { %>
+                        <p>No mouse data yet. Move your mouse to build your profile.</p>
+                    <% } %>
+                </div>
+
+                <div class="profile-card">
+                    <h2>📱 Touch Profile</h2>
+                    <% if (profile.touchDynamics.avgTapDuration) { %>
+                        <div class="info-row">
+                            <span class="label">Avg Tap Duration:</span>
+                            <span class="value"><%= Math.round(profile.touchDynamics.avgTapDuration) %>ms</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Samples Collected:</span>
+                            <span class="value"><%= profile.touchDynamics.samples.length %></span>
+                        </div>
+                    <% } else { %>
+                        <p>No touch data yet. Use touch gestures to build your profile.</p>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <h2>📈 Confidence History</h2>
+                <% if (history.length > 0) { %>
+                    <div class="history-chart">
+                        <% history.forEach(function(h) { %>
+                            <div class="history-bar">
+                                <div class="bar-fill confidence-<%= h.confidence.toLowerCase() %>" 
+                                     style="height: <%= h.score %>%"
+                                     title="<%= h.score %> - <%= new Date(h.timestamp).toLocaleString() %>">
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <p>No history available yet.</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Behavioral Authentication Demo</p>
+        </div>
+    </footer>
+</body>
+</html>

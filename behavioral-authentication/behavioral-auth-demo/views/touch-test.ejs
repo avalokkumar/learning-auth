@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand"><span class="logo">🧠</span><span>Behavioral Auth</span></div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <span class="nav-user">👤 <%= user.username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <div class="main-content">
+        <div class="container">
+            <h1>📱 Touch Gesture Test</h1>
+            <div class="test-card">
+                <p class="test-instructions">Use touch gestures on the area below (works best on mobile/tablet):</p>
+                <div id="touchCanvas" style="width: 100%; max-width: 600px; height: 400px; border: 2px solid #ccc; background: #f5f5f5; margin: 20px auto; touch-action: none;">
+                    <div style="text-align: center; padding-top: 180px; color: #999;">
+                        Tap, swipe, and interact here
+                    </div>
+                </div>
+                <div id="gestureInfo" class="info-box">
+                    <strong>Detected Gestures:</strong>
+                    <div id="gestureList"></div>
+                </div>
+                <button id="submitTest" class="btn btn-primary">Analyze Touch Pattern</button>
+                <div id="testResults"></div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer"><div class="container"><p>&copy; 2024 Behavioral Auth Demo</p></div></footer>
+    <script src="/js/behavioral-tracker.js"></script>
+    <script>
+        const tracker = new BehavioralTracker();
+        tracker.startTracking();
+        const gestureList = document.getElementById('gestureList');
+        setInterval(() => {
+            const data = tracker.getData();
+            const taps = data.touchData.filter(t => t.type === 'tap').length;
+            const swipes = data.touchData.filter(t => t.type === 'swipe').length;
+            gestureList.innerHTML = `Taps: ${taps}, Swipes: ${swipes}`;
+        }, 500);
+        document.getElementById('submitTest').addEventListener('click', async () => {
+            const data = tracker.getData();
+            if (data.touchData.length === 0) {
+                alert('No touch data detected. Please use touch gestures or use a touch-enabled device.');
+                return;
+            }
+            const response = await fetch('/dashboard/api/typing-test', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({behavioralData: data})
+            });
+            const result = await response.json();
+            document.getElementById('testResults').innerHTML = `
+                <div class="alert alert-success">
+                    <strong>Analysis Complete!</strong><br>
+                    Touch Events: ${data.touchData.length}
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>

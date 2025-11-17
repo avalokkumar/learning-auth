@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand"><span class="logo">🧠</span><span>Behavioral Auth</span></div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <span class="nav-user">👤 <%= user.username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <div class="main-content">
+        <div class="container">
+            <h1>🖱️ Mouse Movement Test</h1>
+            <div class="test-card">
+                <p class="test-instructions">Move your mouse around the target area and click the circles:</p>
+                <div id="mouseCanvas" style="width: 600px; height: 400px; border: 2px solid #ccc; position: relative; background: #f5f5f5; margin: 20px auto;">
+                    <div class="target-circle" style="position: absolute; top: 50px; left: 100px;"></div>
+                    <div class="target-circle" style="position: absolute; top: 200px; left: 400px;"></div>
+                    <div class="target-circle" style="position: absolute; top: 300px; left: 250px;"></div>
+                </div>
+                <button id="submitTest" class="btn btn-primary">Analyze Mouse Pattern</button>
+                <div id="testResults"></div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer"><div class="container"><p>&copy; 2024 Behavioral Auth Demo</p></div></footer>
+    <script src="/js/behavioral-tracker.js"></script>
+    <script>
+        const tracker = new BehavioralTracker();
+        tracker.startTracking();
+        document.getElementById('submitTest').addEventListener('click', async () => {
+            const data = tracker.getData();
+            const response = await fetch('/dashboard/api/mouse-test', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({behavioralData: data})
+            });
+            const result = await response.json();
+            document.getElementById('testResults').innerHTML = `
+                <div class="alert alert-success">
+                    <strong>Analysis Complete!</strong><br>
+                    Confidence Score: ${result.assessment.score}<br>
+                    Mouse Events Tracked: ${data.mouseData.length}
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>

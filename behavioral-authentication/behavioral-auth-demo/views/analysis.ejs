@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🧠</span>
+                <span>Behavioral Auth</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link">Profile</a>
+                <a href="/dashboard/analysis" class="nav-link active">Analysis</a>
+                <span class="nav-user">👤 <%= user.username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>Behavioral Analysis</h1>
+
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <h2>⌨️ Keystroke Dynamics</h2>
+                    <% if (profile.keystrokeDynamics.samples.length > 0) { %>
+                        <canvas id="keystrokeChart" width="400" height="200"></canvas>
+                        <div class="metrics">
+                            <div class="metric">
+                                <span class="metric-label">Avg Dwell:</span>
+                                <span class="metric-value"><%= Math.round(profile.keystrokeDynamics.avgDwellTime || 0) %>ms</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Avg Flight:</span>
+                                <span class="metric-value"><%= Math.round(profile.keystrokeDynamics.avgFlightTime || 0) %>ms</span>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <p>Insufficient data. Type more to see analysis.</p>
+                    <% } %>
+                </div>
+
+                <div class="analysis-card">
+                    <h2>🖱️ Mouse Dynamics</h2>
+                    <% if (profile.mouseDynamics.samples.length > 0) { %>
+                        <canvas id="mouseChart" width="400" height="200"></canvas>
+                        <div class="metrics">
+                            <div class="metric">
+                                <span class="metric-label">Avg Speed:</span>
+                                <span class="metric-value"><%= Math.round(profile.mouseDynamics.avgSpeed * 1000 || 0) %> px/s</span>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <p>Insufficient data. Use your mouse more to see analysis.</p>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="analysis-card">
+                <h2>📊 Confidence Score Trend</h2>
+                <% if (history.length > 0) { %>
+                    <canvas id="confidenceChart" width="800" height="300"></canvas>
+                <% } else { %>
+                    <p>No history data available yet.</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Behavioral Authentication Demo</p>
+        </div>
+    </footer>
+
+    <script>
+        console.log('Analysis page loaded');
+    </script>
+</body>
+</html>

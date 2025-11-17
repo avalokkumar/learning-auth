@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span class="brand-text">Adaptive Auth Demo</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link">Profile</a>
+                <a href="/dashboard/transfer" class="nav-link active">Transfer</a>
+                <a href="/dashboard/settings" class="nav-link">Settings</a>
+                <a href="/dashboard/risk-analysis" class="nav-link">Risk Analysis</a>
+                <span class="nav-user">👤 <%= username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <h1>💰 Transfer Funds</h1>
+        
+        <div class="alert alert-warning">
+            <strong>⚠️ High-Risk Operation</strong><br>
+            This action may require additional verification based on current risk level.
+        </div>
+
+        <% if (message) { %>
+            <div class="alert alert-success"><%= message %></div>
+        <% } %>
+
+        <div class="risk-banner risk-<%= riskAssessment.level.toLowerCase() %>">
+            Current Risk Score: <%= riskAssessment.score %>/100 (<%= riskAssessment.level %>)
+        </div>
+        
+        <div class="transfer-form-container">
+            <form method="POST" action="/dashboard/transfer" class="transfer-form">
+                <div class="form-group">
+                    <label for="recipient">Recipient</label>
+                    <input type="text" id="recipient" name="recipient" required placeholder="Enter recipient name or account">
+                </div>
+                <div class="form-group">
+                    <label for="amount">Amount ($)</label>
+                    <input type="number" id="amount" name="amount" required min="1" step="0.01" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="note">Note (Optional)</label>
+                    <textarea id="note" name="note" rows="3" placeholder="Add a note..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Transfer</button>
+            </form>
+        </div>
+
+        <div class="info-box">
+            <h3>About Risk-Based Transfers</h3>
+            <p>Based on your current risk score, you may be asked to provide additional verification:</p>
+            <ul>
+                <li><strong>Low Risk (0-39):</strong> Transfer proceeds immediately</li>
+                <li><strong>Medium Risk (40-59):</strong> Email/SMS verification required</li>
+                <li><strong>High Risk (60-79):</strong> Strong MFA verification required</li>
+                <li><strong>Critical Risk (80+):</strong> Transfer blocked for review</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Adaptive Authentication Demo | Educational Purpose Only</p>
+        </div>
+    </footer>
+</body>
+</html>

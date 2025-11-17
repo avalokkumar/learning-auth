@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🧠</span>
+                <span>Behavioral Auth</span>
+            </div>
+            <div class="nav-menu">
+                <% if (user) { %>
+                    <a href="/dashboard" class="nav-link">Dashboard</a>
+                    <a href="/dashboard/profile" class="nav-link">Profile</a>
+                    <a href="/dashboard/analysis" class="nav-link">Analysis</a>
+                    <span class="nav-user">👤 <%= user %></span>
+                    <a href="/auth/logout" class="nav-link logout">Logout</a>
+                <% } else { %>
+                    <a href="/" class="nav-link active">Home</a>
+                    <a href="/auth/login" class="nav-link">Login</a>
+                <% } %>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container">
+            <h1 class="hero-title">🧠 Behavioral Authentication Demo</h1>
+            <p class="hero-subtitle">Experience continuous authentication through keystroke dynamics, mouse patterns, and touch gestures</p>
+            <div class="cta">
+                <% if (user) { %>
+                    <a href="/dashboard" class="btn btn-primary btn-large">Go to Dashboard</a>
+                <% } else { %>
+                    <a href="/auth/login" class="btn btn-primary btn-large">Try Demo Login</a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="features">
+            <div class="feature-card">
+                <span class="feature-icon">⌨️</span>
+                <h3>Keystroke Dynamics</h3>
+                <p>Analyzes your unique typing rhythm including speed, dwell time, and flight time between keys</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🖱️</span>
+                <h3>Mouse Movement Patterns</h3>
+                <p>Tracks how you move your mouse, click patterns, scrolling behavior, and cursor trajectories</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">📱</span>
+                <h3>Touch Gestures</h3>
+                <p>Monitors tap duration, swipe speed, pressure patterns, and how you hold your device</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🔄</span>
+                <h3>Continuous Authentication</h3>
+                <p>Real-time verification that constantly monitors behavior throughout your session</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">📊</span>
+                <h3>Confidence Scoring</h3>
+                <p>Dynamic trust levels that adapt based on how closely your behavior matches your profile</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🔐</span>
+                <h3>Adaptive Security</h3>
+                <p>Automatically requests re-authentication when suspicious behavior is detected</p>
+            </div>
+        </div>
+
+        <div class="test-accounts">
+            <h2>🔑 Test Accounts</h2>
+            <p>Use these credentials to experience behavioral authentication:</p>
+            <div class="account-list">
+                <div class="account-item">
+                    <strong>Demo User:</strong> <code>demo</code> / <code>demo123</code>
+                </div>
+                <div class="account-item">
+                    <strong>Admin User:</strong> <code>admin</code> / <code>admin123</code>
+                </div>
+            </div>
+            <div class="note">
+                <strong>📝 Note:</strong> The system learns your behavioral patterns over the first 3 login sessions.
+                After that, it will compare your behavior against your established profile for authentication.
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Login</h3>
+                    <p>Log in with your password while the system captures your typing rhythm</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Learning Phase</h3>
+                    <p>First 3 sessions build your unique behavioral profile</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Continuous Monitoring</h3>
+                    <p>System tracks your behavior in real-time during each session</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Adaptive Response</h3>
+                    <p>Requests re-authentication if behavior doesn't match your profile</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Behavioral Authentication Demo | Educational Purpose Only</p>
+        </div>
+    </footer>
+
+    <script>
+        console.log('🧠 Behavioral Authentication Demo');
+        console.log('This demo showcases continuous authentication using behavioral biometrics');
+    </script>
+</body>
+</html>

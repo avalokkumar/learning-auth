@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span class="brand-text">Adaptive Auth Demo</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link active">Profile</a>
+                <a href="/dashboard/transfer" class="nav-link">Transfer</a>
+                <a href="/dashboard/settings" class="nav-link">Settings</a>
+                <a href="/dashboard/risk-analysis" class="nav-link">Risk Analysis</a>
+                <span class="nav-user">👤 <%= username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <h1>👤 Profile</h1>
+        
+        <div class="profile-grid">
+            <div class="profile-card">
+                <h2>Account Information</h2>
+                <div class="info-row">
+                    <span class="label">Username:</span>
+                    <span class="value"><%= username %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Role:</span>
+                    <span class="value"><%= role %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Total Logins:</span>
+                    <span class="value"><%= profile.loginCount || 0 %></span>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <h2>Known Devices</h2>
+                <% if (profile.knownDevices && profile.knownDevices.length > 0) { %>
+                    <ul class="device-list">
+                        <% profile.knownDevices.forEach(device => { %>
+                            <li>Device ID: <%= device.substring(0, 16) %>...</li>
+                        <% }); %>
+                    </ul>
+                <% } else { %>
+                    <p>No registered devices</p>
+                <% } %>
+            </div>
+
+            <div class="profile-card">
+                <h2>Known Locations</h2>
+                <% if (profile.knownLocations && profile.knownLocations.length > 0) { %>
+                    <ul class="location-list">
+                        <% profile.knownLocations.forEach(loc => { %>
+                            <li><%= loc.city || 'Unknown City' %>, <%= loc.country || 'Unknown' %></li>
+                        <% }); %>
+                    </ul>
+                <% } else { %>
+                    <p>No known locations</p>
+                <% } %>
+            </div>
+
+            <div class="profile-card">
+                <h2>Current Session Risk</h2>
+                <div class="risk-score risk-<%= riskAssessment.level.toLowerCase() %>">
+                    <div class="score-number"><%= riskAssessment.score %></div>
+                    <div class="score-label"><%= riskAssessment.level %></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Adaptive Authentication Demo | Educational Purpose Only</p>
+        </div>
+    </footer>
+</body>
+</html>

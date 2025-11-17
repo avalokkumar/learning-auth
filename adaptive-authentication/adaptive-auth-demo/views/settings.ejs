@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span class="brand-text">Adaptive Auth Demo</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/dashboard/profile" class="nav-link">Profile</a>
+                <a href="/dashboard/transfer" class="nav-link">Transfer</a>
+                <a href="/dashboard/settings" class="nav-link active">Settings</a>
+                <a href="/dashboard/risk-analysis" class="nav-link">Risk Analysis</a>
+                <span class="nav-user">👤 <%= username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <h1>⚙️ Settings</h1>
+        
+        <% if (message) { %>
+            <div class="alert alert-success"><%= message %></div>
+        <% } %>
+
+        <div class="risk-banner risk-<%= riskAssessment.level.toLowerCase() %>">
+            Current Risk Score: <%= riskAssessment.score %>/100 (<%= riskAssessment.level %>)
+        </div>
+        
+        <div class="settings-section">
+            <h2>Change Email</h2>
+            <p class="section-note">Sensitive operation - May require additional verification</p>
+            <form method="POST" action="/dashboard/settings/email" class="settings-form">
+                <div class="form-group">
+                    <label for="newEmail">New Email Address</label>
+                    <input type="email" id="newEmail" name="newEmail" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Email</button>
+            </form>
+        </div>
+
+        <div class="settings-section">
+            <h2>Change Password</h2>
+            <p class="section-note">Sensitive operation - May require additional verification</p>
+            <form method="POST" action="/dashboard/settings/password" class="settings-form">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" name="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" name="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Password</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Adaptive Authentication Demo | Educational Purpose Only</p>
+        </div>
+    </footer>
+</body>
+</html>

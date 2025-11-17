@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1 class="auth-title">🔐 Additional Verification Required</h1>
+            
+            <div class="risk-alert risk-<%= riskAssessment.level.toLowerCase() %>">
+                <strong>Risk Level:</strong> <%= riskAssessment.level %> (<%= riskAssessment.score %>/100)
+                <p><%= riskAssessment.recommendation.message %></p>
+            </div>
+            
+            <div class="risk-factors">
+                <h3>Risk Factors Detected:</h3>
+                <ul>
+                    <% riskAssessment.factors.forEach(factor => { %>
+                        <li><strong><%= factor.factor %>:</strong> <%= Math.round(factor.score) %>/100</li>
+                    <% }); %>
+                </ul>
+            </div>
+            
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div class="alert alert-error"><%= error %></div>
+            <% } %>
+            
+            <form method="POST" action="/auth/verify" class="auth-form">
+                <div class="form-group">
+                    <label for="verificationCode">Enter Verification Code</label>
+                    <input type="text" id="verificationCode" name="verificationCode" required autofocus placeholder="Enter 6-digit code">
+                    <small>For demo: use <strong>123456</strong></small>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-full">Verify</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p><a href="/auth/logout">Cancel & Logout</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

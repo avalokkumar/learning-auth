@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand"><span class="logo">🧠</span><span>Behavioral Auth</span></div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <span class="nav-user">👤 <%= user.username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <div class="main-content">
+        <div class="container">
+            <h1>⌨️ Typing Test</h1>
+            <div class="test-card">
+                <p class="test-instructions">Type the following sentence naturally. We'll analyze your keystroke dynamics:</p>
+                <div class="test-prompt">"The quick brown fox jumps over the lazy dog"</div>
+                <textarea id="typingInput" placeholder="Type the sentence here..." rows="3"></textarea>
+                <button id="submitTest" class="btn btn-primary" disabled>Submit Test</button>
+                <div id="testResults"></div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer"><div class="container"><p>&copy; 2024 Behavioral Auth Demo</p></div></footer>
+    <script src="/js/behavioral-tracker.js"></script>
+    <script>
+        const tracker = new BehavioralTracker();
+        tracker.startTracking();
+        const targetText = "The quick brown fox jumps over the lazy dog";
+        const input = document.getElementById('typingInput');
+        const submitBtn = document.getElementById('submitTest');
+        input.addEventListener('input', () => {
+            if (input.value.trim().toLowerCase() === targetText.toLowerCase()) {
+                submitBtn.disabled = false;
+            }
+        });
+        submitBtn.addEventListener('click', async () => {
+            const data = tracker.getData();
+            const response = await fetch('/dashboard/api/typing-test', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({behavioralData: data})
+            });
+            const result = await response.json();
+            document.getElementById('testResults').innerHTML = `
+                <div class="alert alert-success">
+                    <strong>Test Complete!</strong><br>
+                    Confidence Score: ${result.assessment.score}<br>
+                    Level: ${result.assessment.level}
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>

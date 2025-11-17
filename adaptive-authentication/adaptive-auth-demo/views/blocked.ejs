@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1 class="auth-title">🚫 Access Denied</h1>
+            
+            <div class="alert alert-error">
+                <strong>Critical Risk Level Detected</strong><br>
+                Your access has been blocked due to high security risk.
+            </div>
+            
+            <div class="risk-score-large risk-critical">
+                <div class="score-number"><%= riskAssessment.score %></div>
+                <div class="score-label"><%= riskAssessment.level %></div>
+            </div>
+            
+            <div class="risk-factors">
+                <h3>Risk Factors Detected:</h3>
+                <ul>
+                    <% riskAssessment.factors.forEach(factor => { %>
+                        <li><strong><%= factor.factor %>:</strong> <%= Math.round(factor.score) %>/100</li>
+                    <% }); %>
+                </ul>
+            </div>
+            
+            <p class="blocked-message">
+                For security reasons, this action has been blocked. 
+                If you believe this is an error, please contact support.
+            </p>
+            
+            <div class="auth-footer">
+                <a href="/auth/logout" class="btn btn-secondary">Logout</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

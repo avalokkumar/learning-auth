@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand"><span class="logo">🧠</span><span>Behavioral Auth</span></div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <span class="nav-user">👤 <%= user.username %></span>
+                <a href="/auth/logout" class="nav-link logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <div class="main-content">
+        <div class="container">
+            <h1>🔄 Continuous Authentication</h1>
+            <div class="continuous-auth-card">
+                <div class="status-display">
+                    <h2>Real-Time Confidence Monitoring</h2>
+                    <div id="confidenceDisplay" class="confidence-monitor">
+                        <div class="confidence-gauge">
+                            <div class="gauge-fill" id="gaugeFill" style="width: 0%"></div>
+                        </div>
+                        <div class="confidence-value" id="confidenceValue">--</div>
+                        <div class="confidence-label" id="confidenceLabel">Initializing...</div>
+                    </div>
+                </div>
+                <div class="behavior-stats">
+                    <h3>Current Session Activity:</h3>
+                    <div class="stat-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">Keystrokes:</span>
+                            <span class="stat-value" id="keystrokeCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Mouse Events:</span>
+                            <span class="stat-value" id="mouseCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Session Time:</span>
+                            <span class="stat-value" id="sessionTime">0s</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="test-area">
+                    <h3>Interact to Generate Data:</h3>
+                    <textarea placeholder="Type anything here..." rows="4"></textarea>
+                    <div class="button-grid">
+                        <button class="btn btn-secondary">Click Me</button>
+                        <button class="btn btn-secondary">Or Me</button>
+                        <button class="btn btn-secondary">Try This</button>
+                    </div>
+                </div>
+                <div id="alertArea"></div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer"><div class="container"><p>&copy; 2024 Behavioral Auth Demo</p></div></footer>
+    <script src="/js/behavioral-tracker.js"></script>
+    <script>
+        const tracker = new BehavioralTracker({
+            continuousMode: true,
+            sendInterval: 10000
+        });
+        tracker.startTracking();
+        const startTime = Date.now();
+        setInterval(() => {
+            const summary = tracker.getSummary();
+            document.getElementById('keystrokeCount').textContent = summary.keystrokeCount;
+            document.getElementById('mouseCount').textContent = summary.mouseEventCount;
+            document.getElementById('sessionTime').textContent = Math.round((Date.now() - startTime) / 1000) + 's';
+        }, 1000);
+        document.addEventListener('behavioralAssessment', (e) => {
+            const assessment = e.detail;
+            const gaugeFill = document.getElementById('gaugeFill');
+            const confidenceValue = document.getElementById('confidenceValue');
+            const confidenceLabel = document.getElementById('confidenceLabel');
+            gaugeFill.style.width = assessment.score + '%';
+            gaugeFill.className = 'gauge-fill confidence-' + assessment.confidence.toLowerCase();
+            confidenceValue.textContent = assessment.score;
+            confidenceLabel.textContent = assessment.level;
+        });
+        document.addEventListener('requiresReauth', (e) => {
+            const alertArea = document.getElementById('alertArea');
+            alertArea.innerHTML = `
+                <div class="alert alert-warning">
+                    <strong>⚠️ Low Confidence Detected!</strong><br>
+                    Your behavior pattern has changed significantly. Please re-authenticate.
+                    <button class="btn btn-primary" onclick="location.href='/auth/login'">Re-Authenticate</button>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>
