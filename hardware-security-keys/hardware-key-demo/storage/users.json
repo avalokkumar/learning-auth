@@ -1,0 +1,56 @@
+[
+  {
+    "id": "d3d8f0a6-e13a-47d5-ab22-f58432ab443a",
+    "username": "admin",
+    "email": "admin@example.com",
+    "displayName": "admin",
+    "credentials": [
+      {
+        "id": "hJk2ccJDlDi7Or70IG7xEPGNWQpfzZyldcQrvSKcwDY",
+        "credentialID": "hJk2ccJDlDi7Or70IG7xEPGNWQpfzZyldcQrvSKcwDY=",
+        "credentialPublicKey": "pQECAyYgASFYIPYnWuVYIQjON6RPh8FpNRleB/lMzpFmM4Kgm21eeLeIIlggu5nypBOOVQQvU6TRqIJCP5+O4n2mlSfjX0gNkKG8iAw=",
+        "counter": 0,
+        "transports": [
+          "internal"
+        ],
+        "aaguid": "adce0002-35bc-c60a-648b-0b25f1f05503",
+        "credentialDeviceType": "singleDevice",
+        "credentialBackedUp": false,
+        "name": "Security Key 1",
+        "registeredAt": "2025-11-16T17:16:55.445Z",
+        "lastUsed": null
+      },
+      {
+        "id": "Ksg83NX8ZGTxoIFRkjyzHFEYxNRMesXPUh_HZ22jba0",
+        "credentialID": "Ksg83NX8ZGTxoIFRkjyzHFEYxNRMesXPUh/HZ22jba0=",
+        "credentialPublicKey": "pQECAyYgASFYIEvngUIuCALnlwrS3ylOkw9tJq2wqyUDmSm/OAKcgpbvIlggftdnZM8c7u5JS7fLQ0LGdAF7ZNTs2cx8w+dWYxpMuTY=",
+        "counter": 0,
+        "transports": [
+          "internal"
+        ],
+        "aaguid": "adce0002-35bc-c60a-648b-0b25f1f05503",
+        "credentialDeviceType": "singleDevice",
+        "credentialBackedUp": false,
+        "name": "Security Key 2",
+        "registeredAt": "2025-11-17T13:18:10.145Z",
+        "lastUsed": null
+      }
+    ],
+    "preferences": {
+      "requireUserVerification": false,
+      "allowedAuthenticators": [
+        "platform",
+        "cross-platform"
+      ]
+    },
+    "stats": {
+      "registeredAt": "2025-11-16T17:16:42.619Z",
+      "lastLogin": null,
+      "loginCount": 0,
+      "failedLoginAttempts": 0,
+      "credentialsRegistered": 2
+    },
+    "createdAt": "2025-11-16T17:16:42.619Z",
+    "updatedAt": "2025-11-17T13:18:10.145Z"
+  }
+]

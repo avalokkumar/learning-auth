@@ -1,0 +1,358 @@
+[
+  {
+    "id": "c55ab3c9-00af-4dfe-9b71-f51ed09dea6a",
+    "deviceId": "DEV-1763311796065-ew4dnqvkm",
+    "name": "Smart Thermostat",
+    "type": "iot",
+    "status": "active",
+    "trustLevel": "verified",
+    "authMethods": {
+      "certificate": false,
+      "apiKey": true,
+      "fingerprint": false
+    },
+    "info": {
+      "manufacturer": "Nest",
+      "model": "Learning Thermostat",
+      "serialNumber": "NST-001",
+      "firmwareVersion": "5.9.3"
+    },
+    "network": {
+      "ipAddress": "192.168.1.100",
+      "macAddress": "00:1A:2B:3C:4D:5E",
+      "location": "Living Room"
+    },
+    "fingerprint": null,
+    "certificate": {
+      "serialNumber": null,
+      "issuer": null,
+      "subject": null,
+      "validFrom": null,
+      "validTo": null,
+      "fingerprint": null
+    },
+    "apiKey": {
+      "keyPrefix": "sk_live_T0_u",
+      "keyHash": "$2b$10$EIKYWlZUQZiqi7q3cXfuHekVBg8YkiWnHERYuTp3o1gVKssP2SqNi",
+      "permissions": [
+        "read",
+        "write"
+      ],
+      "rateLimit": {
+        "requestsPerMinute": 60,
+        "requestsPerDay": 1000
+      }
+    },
+    "stats": {
+      "lastSeen": null,
+      "connectionsCount": 0,
+      "dataTransferred": 0,
+      "authFailures": 0
+    },
+    "createdAt": "2025-11-16T16:49:56.065Z",
+    "updatedAt": "2025-11-16T16:49:56.066Z",
+    "registeredAt": "2025-11-16T16:49:56.066Z",
+    "lastAuthenticated": null
+  },
+  {
+    "id": "97f9fa8e-ab07-4d25-87b6-45a37fc14ee4",
+    "deviceId": "DEV-1763311796134-9mm16rifb",
+    "name": "Security Camera",
+    "type": "iot",
+    "status": "active",
+    "trustLevel": "trusted",
+    "authMethods": {
+      "certificate": false,
+      "apiKey": true,
+      "fingerprint": false
+    },
+    "info": {
+      "manufacturer": "Ring",
+      "model": "Spotlight Cam",
+      "serialNumber": "RING-CAM-123",
+      "firmwareVersion": "2.1.0"
+    },
+    "network": {
+      "ipAddress": "192.168.1.101",
+      "macAddress": "00:1A:2B:3C:4D:5F",
+      "location": "Front Door"
+    },
+    "fingerprint": null,
+    "certificate": {
+      "serialNumber": null,
+      "issuer": null,
+      "subject": null,
+      "validFrom": null,
+      "validTo": null,
+      "fingerprint": null
+    },
+    "apiKey": {
+      "keyPrefix": "sk_live_2nZU",
+      "keyHash": "$2b$10$jL1fiJ6ccH2vYIE4Um.K0.bOuwcyY.husjbj6AYQidWEl41YZJ3de",
+      "permissions": [
+        "read",
+        "write"
+      ],
+      "rateLimit": {
+        "requestsPerMinute": 60,
+        "requestsPerDay": 1000
+      }
+    },
+    "stats": {
+      "lastSeen": null,
+      "connectionsCount": 0,
+      "dataTransferred": 0,
+      "authFailures": 0
+    },
+    "createdAt": "2025-11-16T16:49:56.134Z",
+    "updatedAt": "2025-11-16T16:49:56.134Z",
+    "registeredAt": "2025-11-16T16:49:56.134Z",
+    "lastAuthenticated": null
+  },
+  {
+    "id": "9a808f21-39a0-4313-8646-f709fd95ec83",
+    "deviceId": "DEV-1763311796195-x7rxnfn41",
+    "name": "Mobile App (iPhone)",
+    "type": "mobile",
+    "status": "active",
+    "trustLevel": "verified",
+    "authMethods": {
+      "certificate": false,
+      "apiKey": true,
+      "fingerprint": false
+    },
+    "info": {
+      "manufacturer": "Apple",
+      "model": "iPhone 14 Pro",
+      "osVersion": "iOS 17.0"
+    },
+    "network": {
+      "ipAddress": "192.168.1.102"
+    },
+    "fingerprint": null,
+    "certificate": {
+      "serialNumber": null,
+      "issuer": null,
+      "subject": null,
+      "validFrom": null,
+      "validTo": null,
+      "fingerprint": null
+    },
+    "apiKey": {
+      "keyPrefix": "sk_live_xLyI",
+      "keyHash": "$2b$10$zIcyVOwRlvh7AEqJgBwp/.jkNYGB4my4uSRc2vYCSbFqBgywSKgaW",
+      "permissions": [
+        "read",
+        "write"
+      ],
+      "rateLimit": {
+        "requestsPerMinute": 60,
+        "requestsPerDay": 1000
+      }
+    },
+    "stats": {
+      "lastSeen": null,
+      "connectionsCount": 0,
+      "dataTransferred": 0,
+      "authFailures": 0
+    },
+    "createdAt": "2025-11-16T16:49:56.195Z",
+    "updatedAt": "2025-11-16T16:49:56.195Z",
+    "registeredAt": "2025-11-16T16:49:56.195Z",
+    "lastAuthenticated": null
+  },
+  {
+    "id": "0d0f1705-9407-4a54-8e57-a2d11305e30e",
+    "deviceId": "DEV-1763311796257-t6yqpfras",
+    "name": "Backend API Server",
+    "type": "server",
+    "status": "active",
+    "trustLevel": "trusted",
+    "authMethods": {
+      "certificate": false,
+      "apiKey": true,
+      "fingerprint": false
+    },
+    "info": {
+      "osVersion": "Ubuntu 22.04 LTS"
+    },
+    "network": {
+      "ipAddress": "10.0.1.50",
+      "location": "Data Center"
+    },
+    "fingerprint": null,
+    "certificate": {
+      "serialNumber": null,
+      "issuer": null,
+      "subject": null,
+      "validFrom": null,
+      "validTo": null,
+      "fingerprint": null
+    },
+    "apiKey": {
+      "keyPrefix": "sk_live_b-ev",
+      "keyHash": "$2b$10$DH1sIGInad/3YxxFULCCZuo3fMhscdA4EkckaCSO9Zk9kmJhSkXyW",
+      "permissions": [
+        "read",
+        "write"
+      ],
+      "rateLimit": {
+        "requestsPerMinute": 60,
+        "requestsPerDay": 1000
+      }
+    },
+    "stats": {
+      "lastSeen": null,
+      "connectionsCount": 0,
+      "dataTransferred": 0,
+      "authFailures": 0
+    },
+    "createdAt": "2025-11-16T16:49:56.257Z",
+    "updatedAt": "2025-11-16T16:49:56.257Z",
+    "registeredAt": "2025-11-16T16:49:56.257Z",
+    "lastAuthenticated": null
+  },
+  {
+    "id": "59589749-2c13-4fb9-913e-a4e787b7795f",
+    "deviceId": "DEV-1763311796318-agc7se5u6",
+    "name": "Temperature Sensor",
+    "type": "iot",
+    "status": "active",
+    "trustLevel": "verified",
+    "authMethods": {
+      "certificate": false,
+      "apiKey": true,
+      "fingerprint": false
+    },
+    "info": {
+      "manufacturer": "Generic",
+      "model": "TMP-100",
+      "serialNumber": "TMP-456"
+    },
+    "network": {
+      "ipAddress": "",
+      "macAddress": "",
+      "location": ""
+    },
+    "fingerprint": null,
+    "certificate": {
+      "serialNumber": null,
+      "issuer": null,
+      "subject": null,
+      "validFrom": null,
+      "validTo": null,
+      "fingerprint": null
+    },
+    "apiKey": {
+      "keyPrefix": "sk_live_TT4y",
+      "keyHash": "$2b$10$RsgR3KRw1.Lgjr7oNhgih.CQoNHWR5irjUOj71XG3ieYlZPbne4CS",
+      "permissions": [
+        "read"
+      ],
+      "rateLimit": {
+        "requestsPerMinute": 60,
+        "requestsPerDay": 1000
+      }
+    },
+    "stats": {
+      "lastSeen": null,
+      "connectionsCount": 0,
+      "dataTransferred": 0,
+      "authFailures": 0
+    },
+    "createdAt": "2025-11-16T16:49:56.318Z",
+    "updatedAt": "2025-11-16T16:50:32.870Z",
+    "registeredAt": "2025-11-16T16:49:56.318Z",
+    "lastAuthenticated": null
+  },
+  {
+    "id": "cfe68f4e-e0d5-4506-8e89-6ddab47cb1f8",
+    "deviceId": "DEV-1763311885448-e0sxlkasv",
+    "name": "Demo device",
+    "type": "server",
+    "status": "active",
+    "trustLevel": "verified",
+    "authMethods": {
+      "certificate": false,
+      "apiKey": true,
+      "fingerprint": false
+    },
+    "info": {
+      "manufacturer": "ClayServerDev",
+      "model": "Clay",
+      "serialNumber": "SN12323"
+    },
+    "network": {
+      "ipAddress": "::1",
+      "macAddress": "01:3:31:3A:3F",
+      "location": ""
+    },
+    "fingerprint": {
+      "hash": "81d744249fd5d97401db742b827a8da6e26e901ae84d749acf06ea919bb4e56e",
+      "characteristics": {
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "browser": {
+          "name": "Chrome",
+          "version": "141.0.0.0",
+          "major": "141"
+        },
+        "engine": {
+          "name": "Blink",
+          "version": "141.0.0.0"
+        },
+        "os": {
+          "name": "Mac OS",
+          "version": "10.15.7"
+        },
+        "device": {
+          "model": "Macintosh",
+          "type": "desktop",
+          "vendor": "Apple"
+        },
+        "cpu": {
+          "architecture": "Unknown"
+        },
+        "headers": {
+          "acceptLanguage": "en-IN,en-US;q=0.9,en-GB;q=0.8,en;q=0.7,hi;q=0.6",
+          "acceptEncoding": "gzip, deflate, br, zstd",
+          "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+          "connection": "keep-alive",
+          "dnt": "0"
+        },
+        "timestamp": "2025-11-16T16:51:25.448Z"
+      },
+      "confidence": 90,
+      "generatedAt": "2025-11-16T16:51:25.448Z"
+    },
+    "certificate": {
+      "serialNumber": null,
+      "issuer": null,
+      "subject": null,
+      "validFrom": null,
+      "validTo": null,
+      "fingerprint": null
+    },
+    "apiKey": {
+      "keyPrefix": "sk_live_x7eu",
+      "keyHash": "$2b$10$DoVc/kIvj1F3ZjNyI07kZ.ywWnuee8cEi0jhw/Nk62A.85FDHGKA2",
+      "permissions": [
+        "read"
+      ],
+      "rateLimit": {
+        "requestsPerMinute": 60,
+        "requestsPerDay": 1000
+      }
+    },
+    "stats": {
+      "lastSeen": null,
+      "connectionsCount": 0,
+      "dataTransferred": 0,
+      "authFailures": 0
+    },
+    "createdAt": "2025-11-16T16:51:25.448Z",
+    "updatedAt": "2025-11-16T16:51:31.032Z",
+    "registeredAt": "2025-11-16T16:51:25.448Z",
+    "lastAuthenticated": null
+  }
+]

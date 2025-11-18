@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔐</span>
+                <span>Device Auth</span>
+            </div>
+            <div class="nav-menu">
+                <% if (user) { %>
+                    <a href="/dashboard" class="nav-link">Dashboard</a>
+                    <a href="/devices" class="nav-link">Devices</a>
+                    <a href="/service-accounts" class="nav-link">Service Accounts</a>
+                    <span class="nav-user">👤 <%= user.name %></span>
+                    <a href="/auth/logout" class="nav-link logout">Logout</a>
+                <% } else { %>
+                    <a href="/auth/login" class="btn btn-primary">Login</a>
+                <% } %>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container">
+            <h1 class="hero-title">Device Authentication Demo</h1>
+            <p class="hero-subtitle">Comprehensive demonstration of device and machine authentication methods</p>
+            
+            <% if (!user) { %>
+                <div class="hero-actions">
+                    <a href="/auth/login" class="btn btn-large btn-primary">Get Started</a>
+                    <a href="/devices/register" class="btn btn-large btn-secondary">Register Device</a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📱</div>
+                    <div class="stat-value"><%= stats.total %></div>
+                    <div class="stat-label">Registered Devices</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-value"><%= stats.byStatus.active %></div>
+                    <div class="stat-label">Active Devices</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🤖</div>
+                    <div class="stat-value"><%= saStats.active %></div>
+                    <div class="stat-label">Service Accounts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔑</div>
+                    <div class="stat-value"><%= stats.byStatus.active + saStats.active %></div>
+                    <div class="stat-label">API Keys Issued</div>
+                </div>
+            </section>
+
+            <section class="features-section">
+                <h2>Authentication Methods</h2>
+                <div class="features">
+                    <div class="feature-card">
+                        <span class="feature-icon">🔑</span>
+                        <h3>API Key Authentication</h3>
+                        <p>Secure API keys for device-to-server communication</p>
+                        <ul>
+                            <li>Unique keys per device</li>
+                            <li>Rate limiting</li>
+                            <li>Key rotation</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">👆</span>
+                        <h3>Device Fingerprinting</h3>
+                        <p>Identify devices based on hardware/software characteristics</p>
+                        <ul>
+                            <li>Browser fingerprinting</li>
+                            <li>Hardware detection</li>
+                            <li>Anomaly detection</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">📜</span>
+                        <h3>Certificate-Based mTLS</h3>
+                        <p>Mutual TLS with client certificates</p>
+                        <ul>
+                            <li>X.509 certificates</li>
+                            <li>Two-way authentication</li>
+                            <li>PKI infrastructure</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">🤖</span>
+                        <h3>Service Accounts</h3>
+                        <p>Non-human accounts for automated processes</p>
+                        <ul>
+                            <li>Role-based access</li>
+                            <li>Permission management</li>
+                            <li>Audit logging</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">🌐</span>
+                        <h3>Machine-to-Machine (M2M)</h3>
+                        <p>Service-to-service authentication</p>
+                        <ul>
+                            <li>Automated workflows</li>
+                            <li>API integration</li>
+                            <li>Microservices auth</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">🛡️</span>
+                        <h3>Device Trust Levels</h3>
+                        <p>Progressive trust based on verification</p>
+                        <ul>
+                            <li>Unknown → Registered</li>
+                            <li>Verified → Trusted</li>
+                            <li>Risk assessment</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="use-cases">
+                <h2>Industry Use Cases</h2>
+                <div class="use-case-grid">
+                    <div class="use-case">
+                        <span class="icon">🏭</span>
+                        <h3>Industrial IoT</h3>
+                        <p>Factory sensors, robots, and equipment authentication</p>
+                    </div>
+                    <div class="use-case">
+                        <span class="icon">🏥</span>
+                        <h3>Healthcare</h3>
+                        <p>Medical devices and EHR system access</p>
+                    </div>
+                    <div class="use-case">
+                        <span class="icon">🚗</span>
+                        <h3>Connected Vehicles</h3>
+                        <p>Car components and OTA update authentication</p>
+                    </div>
+                    <div class="use-case">
+                        <span class="icon">🏠</span>
+                        <h3>Smart Home</h3>
+                        <p>IoT devices and home automation</p>
+                    </div>
+                </div>
+            </section>
+
+            <% if (!user) { %>
+            <section class="cta-section">
+                <div class="cta-card">
+                    <h2>Ready to Test Device Authentication?</h2>
+                    <p>Login to explore the full demo with device registration, API key management, and more.</p>
+                    <a href="/auth/login" class="btn btn-large btn-primary">Login Now</a>
+                    <p class="hint">Demo credentials: admin / admin123</p>
+                </div>
+            </section>
+            <% } %>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Device Authentication Demo | Educational Purpose</p>
+        </div>
+    </footer>
+</body>
+</html>

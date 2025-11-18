@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title><link rel="stylesheet" href="/css/style.css">
+<script src="/js/webauthn-client.js"></script></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand">🔑 Hardware Keys</div>
+<div class="nav-menu"><a href="/dashboard">Dashboard</a><a href="/dashboard/profile">Profile</a>
+<span class="nav-user">👤 <%= user.username %></span><a href="/auth/logout" class="logout">Logout</a></div></div></nav>
+<div class="auth-container"><div class="auth-card"><h1>🔐 Add Security Key</h1>
+<p class="subtitle">Register an additional hardware security key</p>
+<form id="addKeyForm"><div class="form-group"><label>Security Key Name *</label>
+<input type="text" id="keyName" name="keyName" required placeholder="Backup YubiKey"></div>
+<button type="submit" class="btn btn-primary btn-block">Add Security Key</button></form>
+<div id="status" class="status-message" style="display:none"></div>
+<p class="hint">Recommended: Add a backup key in case you lose your primary key</p></div></div>
+<script>
+document.getElementById('addKeyForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const keyName = document.getElementById('keyName').value;
+  const status = document.getElementById('status');
+  const btn = e.target.querySelector('button');
+  
+  try {
+    btn.disabled = true;
+    btn.textContent = 'Touch your security key...';
+    status.style.display = 'block';
+    status.className = 'status-message info';
+    status.textContent = '🔑 Please insert and touch your new security key';
+    
+    const result = await webauthnClient.addKey(keyName);
+    
+    status.className = 'status-message success';
+    status.textContent = '✅ Security key added! Redirecting...';
+    setTimeout(() => window.location.href = '/dashboard', 2000);
+  } catch (error) {
+    status.className = 'status-message error';
+    status.textContent = '❌ ' + error.message;
+    btn.disabled = false;
+    btn.textContent = 'Add Security Key';
+  }
+});
+</script>
+</body></html>

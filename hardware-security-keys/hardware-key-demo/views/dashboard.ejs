@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand">🔑 Hardware Keys</div>
+<div class="nav-menu"><a href="/dashboard" class="active">Dashboard</a><a href="/dashboard/profile">Profile</a>
+<span class="nav-user">👤 <%= user.username %></span><a href="/auth/logout" class="logout">Logout</a></div></div></nav>
+<div class="main-content"><div class="container"><h1>Welcome, <%= user.displayName %>!</h1>
+<div class="stats-grid"><div class="stat-card"><div class="stat-icon">🔑</div>
+<div class="stat-value"><%= credentials.length %></div><div class="stat-label">Security Keys</div></div>
+<div class="stat-card"><div class="stat-icon">🔐</div><div class="stat-value"><%= fullUser.stats.loginCount %></div>
+<div class="stat-label">Total Logins</div></div><div class="stat-card"><div class="stat-icon">📅</div>
+<div class="stat-value"><%= fullUser.stats.lastLogin ? new Date(fullUser.stats.lastLogin).toLocaleDateString() : 'Never' %></div>
+<div class="stat-label">Last Login</div></div></div>
+<div class="section"><div class="section-header"><h2>Your Security Keys</h2>
+<a href="/dashboard/add-key" class="btn btn-primary">Add Security Key</a></div>
+<div class="keys-grid"><% credentials.forEach(cred => { %>
+<div class="key-card"><div class="key-header"><div class="key-icon"><%= cred.authenticatorInfo.icon %></div>
+<div class="key-info"><h3><%= cred.name %></h3>
+<p class="key-type"><%= cred.authenticatorInfo.name || 'Unknown Authenticator' %></p></div></div>
+<div class="key-details"><p><strong>Transport:</strong> <%= cred.transportDisplay %></p>
+<p><strong>Registered:</strong> <%= new Date(cred.registeredAt).toLocaleString() %></p>
+<% if (cred.lastUsed) { %><p><strong>Last Used:</strong> <%= new Date(cred.lastUsed).toLocaleString() %></p><% } %>
+<p><strong>Counter:</strong> <%= cred.counter %></p></div>
+<button onclick="removeKey('<%= cred.credentialID %>', '<%= cred.name %>')" class="btn btn-danger btn-small">Remove</button></div>
+<% }); %>
+<% if (credentials.length === 0) { %><div class="empty-state"><p>No security keys registered yet</p>
+<a href="/dashboard/add-key" class="btn btn-primary">Add Your First Key</a></div><% } %></div></div></div></div>
+<script>
+async function removeKey(credentialId, name) {
+  if (!confirm(`Remove security key "${name}"?`)) return;
+  try {
+    const res = await fetch(`/dashboard/key/${credentialId}`, { method: 'DELETE' });
+    if (res.ok) { alert('Security key removed'); location.reload(); }
+    else { const err = await res.json(); alert('Error: ' + err.error); }
+  } catch (error) { alert('Error removing key'); }
+}
+</script>
+</body></html>

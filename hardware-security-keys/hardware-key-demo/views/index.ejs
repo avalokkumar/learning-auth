@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">🔑</span>
+                <span>Hardware Keys</span>
+            </div>
+            <div class="nav-menu">
+                <% if (user) { %>
+                    <a href="/dashboard" class="nav-link">Dashboard</a>
+                    <span class="nav-user">👤 <%= user.username %></span>
+                    <a href="/auth/logout" class="nav-link logout">Logout</a>
+                <% } else { %>
+                    <a href="/auth/login" class="btn btn-secondary">Login</a>
+                    <a href="/auth/register" class="btn btn-primary">Register</a>
+                <% } %>
+            </div>
+        </div>
+    </nav>
+    <div class="hero">
+        <div class="container">
+            <h1 class="hero-title">🔐 Hardware Security Keys Demo</h1>
+            <p class="hero-subtitle">Experience passwordless authentication with FIDO2/WebAuthn</p>
+            <% if (!user) { %>
+                <div class="hero-actions">
+                    <a href="/auth/register" class="btn btn-large btn-primary">Get Started</a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="container">
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value"><%= stats.total %></div>
+                    <div class="stat-label">Registered Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔑</div>
+                    <div class="stat-value"><%= stats.totalCredentials %></div>
+                    <div class="stat-label">Security Keys</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔐</div>
+                    <div class="stat-value"><%= stats.totalLogins %></div>
+                    <div class="stat-label">Passwordless Logins</div>
+                </div>
+            </section>
+            <section class="features">
+                <div class="feature-card">
+                    <span class="feature-icon">🔐</span>
+                    <h3>FIDO2/WebAuthn</h3>
+                    <p>Industry-standard passwordless authentication</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🔒</span>
+                    <h3>Phishing-Proof</h3>
+                    <p>Cannot be stolen or phished remotely</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3>Fast & Easy</h3>
+                    <p>Just touch your security key to login</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎯</span>
+                    <h3>No Passwords</h3>
+                    <p>No passwords to remember or manage</p>
+                </div>
+            </section>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Hardware Security Keys Demo</p>
+        </div>
+    </footer>
+</body>
+</html>

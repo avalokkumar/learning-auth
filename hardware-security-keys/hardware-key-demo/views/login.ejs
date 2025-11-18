@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Login</title><link rel="stylesheet" href="/css/style.css">
+<script src="/js/webauthn-client.js"></script></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand">🔑 Hardware Keys</div>
+<div class="nav-menu"><a href="/">Home</a><a href="/auth/register">Register</a></div></div></nav>
+<div class="auth-container"><div class="auth-card"><h1>🔐 Login</h1>
+<p class="subtitle">Use your security key to login</p>
+<form id="loginForm"><div class="form-group"><label>Username *</label>
+<input type="text" id="username" name="username" required placeholder="john.doe"></div>
+<button type="submit" class="btn btn-primary btn-block">Login with Security Key</button></form>
+<div id="status" class="status-message" style="display:none"></div>
+<p class="hint">No password needed - just your security key!</p></div></div>
+<script>
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const username = document.getElementById('username').value;
+  const status = document.getElementById('status');
+  const btn = e.target.querySelector('button');
+  
+  try {
+    btn.disabled = true;
+    btn.textContent = 'Touch your security key...';
+    status.style.display = 'block';
+    status.className = 'status-message info';
+    status.textContent = '🔑 Please touch your security key';
+    
+    const result = await webauthnClient.authenticate(username);
+    
+    status.className = 'status-message success';
+    status.textContent = '✅ Login successful! Redirecting...';
+    setTimeout(() => window.location.href = '/dashboard', 2000);
+  } catch (error) {
+    status.className = 'status-message error';
+    status.textContent = '❌ ' + error.message;
+    btn.disabled = false;
+    btn.textContent = 'Login with Security Key';
+  }
+});
+</script>
+</body></html>

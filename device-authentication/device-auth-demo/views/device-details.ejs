@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Device Details</title><link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand">🔐 Device Auth</div>
+<div class="nav-menu"><a href="/dashboard">Dashboard</a><a href="/devices">Devices</a>
+<a href="/service-accounts">Service Accounts</a><span>👤 <%= user.name %></span><a href="/auth/logout">Logout</a></div></div></nav>
+<div class="main-content"><div class="container"><h1><%= device.name %></h1>
+<div class="device-status"><span class="badge <%= device.status %>"><%= device.status %></span>
+<span class="badge <%= device.trustLevel %>"><%= device.trustLevel %></span></div>
+<div class="details-grid"><div class="details-card"><h2>Device Information</h2>
+<div class="info-row"><span class="label">Device ID:</span><span class="value"><%= device.deviceId %></span></div>
+<div class="info-row"><span class="label">Type:</span><span class="value"><%= device.type %></span></div>
+<div class="info-row"><span class="label">Manufacturer:</span><span class="value"><%= device.info.manufacturer || 'N/A' %></span></div>
+<div class="info-row"><span class="label">Model:</span><span class="value"><%= device.info.model || 'N/A' %></span></div>
+<div class="info-row"><span class="label">Serial Number:</span><span class="value"><%= device.info.serialNumber || 'N/A' %></span></div></div>
+<div class="details-card"><h2>Authentication Methods</h2>
+<% authMethods.forEach(method => { %>
+<div class="auth-method <%= method.enabled ? 'enabled' : 'disabled' %>">
+<strong><%= method.type.toUpperCase() %></strong>: <%= method.enabled ? 'Enabled ✓' : 'Disabled' %></div>
+<% }); %>
+<% if (!device.authMethods.apiKey) { %>
+<button onclick="generateAPIKey()" class="btn btn-primary">Generate API Key</button><% } %></div>
+<div class="details-card"><h2>Statistics</h2>
+<div class="info-row"><span class="label">Registered:</span><span class="value"><%= new Date(device.registeredAt).toLocaleString() %></span></div>
+<div class="info-row"><span class="label">Last Seen:</span><span class="value"><%= device.stats.lastSeen ? new Date(device.stats.lastSeen).toLocaleString() : 'Never' %></span></div>
+<div class="info-row"><span class="label">Connections:</span><span class="value"><%= device.stats.connectionsCount %></span></div>
+<div class="info-row"><span class="label">Auth Failures:</span><span class="value"><%= device.stats.authFailures %></span></div></div></div>
+<div id="apiKeyModal" class="modal" style="display:none"><div class="modal-content">
+<h2>API Key Generated</h2><p class="warning">⚠️ This is the only time you'll see this key. Save it now!</p>
+<div class="api-key-display"><code id="apiKeyValue"></code></div>
+<button onclick="copyAPIKey()" class="btn btn-primary">Copy to Clipboard</button>
+<button onclick="closeModal()" class="btn btn-secondary">Close</button></div></div>
+<script>
+function generateAPIKey(){fetch('/devices/<%= device.id %>/generate-api-key',{method:'POST',headers:{'Content-Type':'application/json'}}).then(r=>r.json()).then(data=>{if(data.success){document.getElementById('apiKeyValue').textContent=data.apiKey;document.getElementById('apiKeyModal').style.display='flex';setTimeout(()=>location.reload(),30000)}else{alert('Error: '+data.error)}}).catch(e=>alert('Error generating API key'))}
+function copyAPIKey(){const key=document.getElementById('apiKeyValue').textContent;navigator.clipboard.writeText(key).then(()=>alert('API key copied!')).catch(()=>alert('Failed to copy'))}
+function closeModal(){document.getElementById('apiKeyModal').style.display='none';location.reload()}
+</script></div></div></body></html>

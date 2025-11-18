@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Device Fingerprinting</title><link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand">🔐 Device Auth</div>
+<div class="nav-menu"><a href="/dashboard">Dashboard</a><a href="/devices">Devices</a>
+<span>👤 <%= user.name %></span><a href="/auth/logout">Logout</a></div></div></nav>
+<div class="main-content"><div class="container"><h1>👆 Device Fingerprinting Demo</h1>
+<p class="subtitle">Your device fingerprint based on browser and hardware characteristics</p>
+<div class="fingerprint-result"><div class="fp-main"><h2>Fingerprint Hash</h2>
+<div class="hash-display"><code><%= fingerprint.hash %></code></div>
+<p class="confidence">Confidence Score: <strong><%= fingerprint.confidence %>%</strong></p></div>
+<div class="fp-info"><h3>Device Information</h3><div class="info-row"><span class="label">Device Type:</span>
+<span class="value"><%= deviceInfo.type %></span></div><div class="info-row"><span class="label">Operating System:</span>
+<span class="value"><%= deviceInfo.os %></span></div><div class="info-row"><span class="label">Browser:</span>
+<span class="value"><%= deviceInfo.browser %></span></div><div class="info-row"><span class="label">Device:</span>
+<span class="value"><%= deviceInfo.device %></span></div><div class="info-row"><span class="label">Bot Detection:</span>
+<span class="value"><%= deviceInfo.isBot ? '🤖 Bot Detected' : '✅ Human' %></span></div></div>
+<div class="fp-characteristics"><h3>Collected Characteristics</h3>
+<details><summary>Browser Details</summary><pre><%= JSON.stringify(fingerprint.characteristics.browser, null, 2) %></pre></details>
+<details><summary>Operating System</summary><pre><%= JSON.stringify(fingerprint.characteristics.os, null, 2) %></pre></details>
+<details><summary>Device Info</summary><pre><%= JSON.stringify(fingerprint.characteristics.device, null, 2) %></pre></details>
+<details><summary>Network Info</summary><pre>IP: <%= fingerprint.characteristics.ip %>
+Language: <%= fingerprint.characteristics.headers.acceptLanguage %></pre></details></div></div>
+<div class="fp-explanation"><h2>How It Works</h2><ul>
+<li>Collects browser user agent, OS version, device model</li><li>Analyzes HTTP headers (language, encoding)</li>
+<li>Creates unique hash from all characteristics</li><li>Can detect device even without cookies</li>
+<li>Used for fraud detection and security</li></ul></div></div></div></body></html>
