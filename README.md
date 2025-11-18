@@ -95,8 +95,3 @@ This documentation is based on industry standards and best practices. For questi
 - OpenID Connect Core 1.0
 - FIDO2 Web Authentication Standards
 - Industry security best practices
-
----
-
-**Last Updated:** 2025
-**Version:** 1.0
