@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand">🔐 HTTP Auth Demo</div>
+<div class="nav-menu"><a href="/dashboard">Dashboard</a><a href="/api-keys">API Keys</a>
+<span class="nav-user">👤 <%= user.username %></span><a href="/profile" class="active">Profile</a>
+<a href="#" onclick="logout()" class="logout">Logout</a></div></div></nav>
+<div class="main-content"><div class="container"><h1>Profile</h1>
+<div class="profile-card"><div class="profile-section"><h2>Account Information</h2>
+<div class="info-row"><span class="label">Username:</span><span class="value"><%= fullUser.username %></span></div>
+<div class="info-row"><span class="label">Email:</span><span class="value"><%= fullUser.email %></span></div>
+<div class="info-row"><span class="label">Display Name:</span><span class="value"><%= fullUser.displayName %></span></div>
+<div class="info-row"><span class="label">Role:</span><span class="value"><%= fullUser.role %></span></div>
+<div class="info-row"><span class="label">User ID:</span><span class="value code"><%= fullUser.id %></span></div></div>
+<div class="profile-section"><h2>Statistics</h2>
+<div class="info-row"><span class="label">Member Since:</span><span class="value"><%= new Date(fullUser.createdAt).toLocaleDateString() %></span></div>
+<div class="info-row"><span class="label">Last Login:</span><span class="value"><%= fullUser.lastLogin ? new Date(fullUser.lastLogin).toLocaleString() : 'Never' %></span></div>
+<div class="info-row"><span class="label">Total Logins:</span><span class="value"><%= fullUser.stats.loginCount %></span></div>
+<div class="info-row"><span class="label">Failed Attempts:</span><span class="value"><%= fullUser.stats.failedLoginAttempts %></span></div></div>
+<div class="profile-section"><h2>Recent Activity</h2>
+<% if (auditLogs.length > 0) { %><div class="audit-log">
+<% auditLogs.forEach(log => { %>
+<div class="log-entry"><span class="log-time"><%= new Date(log.timestamp).toLocaleString() %></span>
+<span class="log-action"><%= log.action %></span></div>
+<% }); %></div><% } else { %><p>No recent activity</p><% } %></div></div></div></div>
+<script>
+async function logout() {
+  try {
+    const res = await fetch('/auth/logout', { method: 'POST' });
+    if (res.ok) window.location.href = '/';
+  } catch (error) {
+    console.error('Logout failed:', error);
+  }
+}
+</script>
+</body></html>

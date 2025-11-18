@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand">🔐 HTTP Auth Demo</div>
+<div class="nav-menu"><a href="/">Home</a><% if (user) { %><a href="/dashboard">Dashboard</a>
+<a href="/docs" class="active">Docs</a><span class="nav-user">👤 <%= user.username %></span>
+<a href="#" onclick="logout()">Logout</a><% } else { %><a href="/login">Login</a><% } %></div></div></nav>
+<div class="main-content"><div class="container"><h1>API Documentation</h1>
+<div class="docs-section"><h2>🔓 HTTP Basic Auth</h2>
+<p>Simple username/password authentication using Base64 encoding.</p>
+<div class="code-example"><h4>Example Request:</h4>
+<pre>curl -u admin:admin123 http://localhost:3006/api/basic/user</pre>
+<h4>Or with Authorization header:</h4>
+<pre>curl -H "Authorization: Basic YWRtaW46YWRtaW4xMjM=" http://localhost:3006/api/basic/user</pre></div></div>
+<div class="docs-section"><h2>🔐 HTTP Digest Auth</h2>
+<p>More secure than Basic auth, uses MD5 hashing with nonce for replay protection.</p>
+<div class="code-example"><h4>Example Request:</h4>
+<pre>curl --digest -u admin:admin123 http://localhost:3006/api/digest/user</pre></div></div>
+<div class="docs-section"><h2>🎫 Bearer Token (JWT)</h2>
+<p>Modern token-based authentication using JSON Web Tokens.</p>
+<div class="code-example"><h4>Step 1: Get Token</h4>
+<pre>curl -X POST http://localhost:3006/auth/token \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"admin123"}'</pre>
+<h4>Step 2: Use Token</h4>
+<pre>curl -H "Authorization: Bearer YOUR_TOKEN_HERE" http://localhost:3006/api/bearer/user</pre>
+<h4>Step 3: Refresh Token</h4>
+<pre>curl -X POST http://localhost:3006/auth/refresh \
+  -H "Content-Type: application/json" \
+  -d '{"refresh_token":"YOUR_REFRESH_TOKEN"}'</pre></div></div>
+<div class="docs-section"><h2>🔑 API Key Auth</h2>
+<p>Simple key-based authentication using X-API-Key header.</p>
+<div class="code-example"><h4>Example Request:</h4>
+<pre>curl -H "X-API-Key: sk_your_api_key_here" http://localhost:3006/api/apikey/user</pre>
+<h4>Alternative: Authorization Header</h4>
+<pre>curl -H "Authorization: ApiKey sk_your_api_key_here" http://localhost:3006/api/apikey/user</pre></div></div>
+<div class="docs-section"><h2>📡 Available Endpoints</h2>
+<table class="endpoints-table"><thead><tr><th>Endpoint</th><th>Method</th><th>Auth</th><th>Description</th></tr></thead>
+<tbody><tr><td>/api/health</td><td>GET</td><td>None</td><td>Health check</td></tr>
+<tr><td>/api/basic/user</td><td>GET</td><td>Basic</td><td>User info (Basic auth)</td></tr>
+<tr><td>/api/digest/user</td><td>GET</td><td>Digest</td><td>User info (Digest auth)</td></tr>
+<tr><td>/api/bearer/user</td><td>GET</td><td>Bearer</td><td>User info (Bearer token)</td></tr>
+<tr><td>/api/apikey/user</td><td>GET</td><td>API Key</td><td>User info (API key)</td></tr>
+<tr><td>/api/user</td><td>GET</td><td>Any</td><td>User info (multiple auth methods)</td></tr>
+<tr><td>/api/profile</td><td>GET</td><td>Any</td><td>Full profile with activity</td></tr>
+<tr><td>/api/public</td><td>GET</td><td>Optional</td><td>Public endpoint</td></tr></tbody></table></div></div></div>
+<script>
+async function logout() {
+  const res = await fetch('/auth/logout', {method: 'POST'});
+  if (res.ok) window.location.href = '/';
+}
+</script>
+</body></html>

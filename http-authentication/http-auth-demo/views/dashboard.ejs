@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand">🔐 HTTP Auth Demo</div>
+<div class="nav-menu"><a href="/dashboard" class="active">Dashboard</a><a href="/api-keys">API Keys</a><a href="/docs">Docs</a>
+<span class="nav-user">👤 <%= user.username %></span><a href="/profile">Profile</a>
+<a href="#" onclick="logout()" class="logout">Logout</a></div></div></nav>
+<div class="main-content"><div class="container"><h1>Dashboard</h1>
+<div class="stats-grid"><div class="stat-card"><div class="stat-icon">🔐</div>
+<div class="stat-value"><%= userStats.stats.loginCount %></div><div class="stat-label">Your Logins</div></div>
+<div class="stat-card"><div class="stat-icon">📅</div>
+<div class="stat-value"><%= userStats.lastLogin ? new Date(userStats.lastLogin).toLocaleDateString() : 'Never' %></div>
+<div class="stat-label">Last Login</div></div><div class="stat-card"><div class="stat-icon">👥</div>
+<div class="stat-value"><%= stats.users %></div><div class="stat-label">Total Users</div></div>
+<div class="stat-card"><div class="stat-icon">🔑</div><div class="stat-value"><%= stats.activeApiKeys %></div>
+<div class="stat-label">Active API Keys</div></div></div>
+<div class="section"><h2>Quick Actions</h2><div class="actions-grid">
+<a href="/api-keys" class="action-card"><span class="action-icon">🔑</span><h3>Manage API Keys</h3><p>Generate and manage your API keys</p></a>
+<a href="/auth-demo" class="action-card"><span class="action-icon">🧪</span><h3>Test Authentication</h3><p>Try different auth methods</p></a>
+<a href="/docs" class="action-card"><span class="action-icon">📚</span><h3>API Documentation</h3><p>View API endpoints and examples</p></a>
+<a href="/profile" class="action-card"><span class="action-icon">👤</span><h3>Your Profile</h3><p>View your account details</p></a>
+</div></div></div></div>
+<script>
+async function logout() {
+  try {
+    const res = await fetch('/auth/logout', { method: 'POST' });
+    if (res.ok) window.location.href = '/';
+  } catch (error) {
+    console.error('Logout failed:', error);
+  }
+}
+</script>
+</body></html>

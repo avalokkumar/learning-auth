@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Error</title><link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand">🔐 HTTP Auth Demo</div>
+<div class="nav-menu"><a href="/">Home</a></div></div></nav>
+<div class="main-content"><div class="error-container"><h1>⚠️</h1><h2>Error</h2>
+<p><%= message %></p><% if (error && error.stack) { %><pre style="text-align:left;background:#f4f4f4;padding:1rem;border-radius:6px;overflow-x:auto"><%= error.stack %></pre><% } %>
+<a href="/" class="btn btn-primary">Go Home</a></div></div></body></html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand">🔐 HTTP Auth Demo</div>
+<div class="nav-menu"><a href="/">Home</a></div></div></nav>
+<div class="auth-container"><div class="auth-card"><h1>🔐 Login</h1>
+<% if (error) { %><div class="alert alert-error"><%= error %></div><% } %>
+<form id="loginForm"><div class="form-group"><label>Username</label>
+<input type="text" name="username" required placeholder="admin"></div>
+<div class="form-group"><label>Password</label>
+<input type="password" name="password" required placeholder="admin123"></div>
+<button type="submit" class="btn btn-primary btn-block">Login</button></form>
+<div id="status" style="margin-top:1rem"></div>
+<div class="hint"><p>Demo Credentials:</p><p>admin / admin123<br>user / user123<br>api_user / api123</p></div></div></div>
+<script>
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const data = {username: formData.get('username'), password: formData.get('password')};
+  const status = document.getElementById('status');
+  try {
+    const res = await fetch('/auth/login', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)});
+    const result = await res.json();
+    if (res.ok) {
+      status.innerHTML = '<div class="alert alert-success">Login successful! Redirecting...</div>';
+      setTimeout(() => window.location.href = '/dashboard', 1000);
+    } else {
+      status.innerHTML = `<div class="alert alert-error">${result.error}</div>`;
+    }
+  } catch (error) {
+    status.innerHTML = '<div class="alert alert-error">Login failed</div>';
+  }
+});
+</script>
+</body></html>

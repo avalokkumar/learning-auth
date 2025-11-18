@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title>
+<link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand">🔐 MFA Demo</div>
+<div class="nav-menu"><% if (user) { %><a href="/dashboard">Dashboard</a><a href="/dashboard/features">Features</a>
+<a href="/dashboard/mfa-settings">MFA Settings</a><span class="nav-user">👤 <%= user.username %></span>
+<a href="/dashboard/profile">Profile</a><a href="#" onclick="logout()">Logout</a>
+<% } else { %><a href="/auth/login" class="btn btn-primary">Login</a><% } %></div></div></nav>
+<div class="hero"><div class="container"><h1 class="hero-title">🔐 Multi-Factor Authentication</h1>
+<p class="hero-subtitle">Secure your account with multiple verification methods</p></div></div>
+<div class="main-content"><div class="container"><section class="stats-grid">
+<div class="stat-card"><div class="stat-icon">👥</div><div class="stat-value"><%= stats.users %></div>
+<div class="stat-label">Users</div></div><div class="stat-card"><div class="stat-icon">🔐</div>
+<div class="stat-value"><%= stats.mfaEnabledUsers %></div><div class="stat-label">MFA Enabled</div></div>
+<div class="stat-card"><div class="stat-icon">📱</div><div class="stat-value"><%= stats.enrolledMethods %></div>
+<div class="stat-label">MFA Methods</div></div><div class="stat-card"><div class="stat-icon">🔑</div>
+<div class="stat-value"><%= stats.activeBackupCodes %></div><div class="stat-label">Backup Codes</div></div>
+</section><section class="features"><div class="feature-card"><span class="feature-icon">📱</span><h3>TOTP Authenticator</h3>
+<p>Use Google Authenticator, Authy, or Microsoft Authenticator for time-based codes</p></div>
+<div class="feature-card"><span class="feature-icon">💬</span><h3>SMS One-Time Password</h3>
+<p>Receive verification codes via text message</p></div>
+<div class="feature-card"><span class="feature-icon">📧</span><h3>Email Verification</h3>
+<p>Get verification codes in your email inbox</p></div>
+<div class="feature-card"><span class="feature-icon">🔑</span><h3>Backup Codes</h3>
+<p>Emergency recovery codes when you can't access your device</p></div></section></div></div>
+<footer class="footer"><div class="container"><p>&copy; 2024 MFA Demo</p></div></footer>
+<script>async function logout(){const res=await fetch('/auth/logout',{method:'POST'});if(res.ok)window.location.href='/';}</script>
+</body></html>

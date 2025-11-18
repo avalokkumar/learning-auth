@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title>
+<link rel="stylesheet" href="/css/style.css"></head><body><nav class="navbar"><div class="container">
+<div class="nav-brand">🔐 MFA Demo</div><div class="nav-menu"><a href="/">Home</a></div></div></nav>
+<div class="auth-container"><div class="auth-card"><h1>🔐 Login</h1>
+<% if (error) { %><div class="alert alert-error"><%= error %></div><% } %>
+<form id="loginForm"><div class="form-group"><label>Username</label>
+<input type="text" name="username" required placeholder="admin"></div>
+<div class="form-group"><label>Password</label><input type="password" name="password" required placeholder="admin123"></div>
+<button type="submit" class="btn btn-primary btn-block">Login</button></form>
+<div id="status" style="margin-top:1rem"></div>
+<div id="mfaVerification" style="display:none;margin-top:2rem">
+<h3>Multi-Factor Authentication</h3><p>Select verification method:</p>
+<div id="mfaMethods" class="mfa-methods"></div></div>
+<div class="hint"><p>Demo Credentials:</p><p>admin / admin123<br>user / user123</p></div></div></div>
+<script>
+let mfaSessionId = null;
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const data = {username: formData.get('username'), password: formData.get('password')};
+  const status = document.getElementById('status');
+  try {
+    const res = await fetch('/auth/login', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)});
+    const result = await res.json();
+    if (res.ok) {
+      if (result.requiresMFA) {
+        mfaSessionId = result.mfaSessionId;
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('mfaVerification').style.display = 'block';
+        showMFAMethods(result.availableMethods);
+      } else {
+        status.innerHTML = '<div class="alert alert-success">Login successful!</div>';
+        setTimeout(() => window.location.href = '/dashboard', 1000);
+      }
+    } else {
+      status.innerHTML = `<div class="alert alert-error">${result.error}</div>`;
+    }
+  } catch (error) {
+    status.innerHTML = '<div class="alert alert-error">Login failed</div>';
+  }
+});
+
+function showMFAMethods(methods) {
+  const container = document.getElementById('mfaMethods');
+  container.innerHTML = methods.map(m => `
+    <button class="btn btn-secondary" onclick="selectMFAMethod('${m}')">${m.toUpperCase()}</button>
+  `).join('') + '<button class="btn btn-secondary" onclick="selectMFAMethod(\'backup\')">Backup Code</button>';
+}
+
+async function selectMFAMethod(method) {
+  const container = document.getElementById('mfaMethods');
+  
+  if (method === 'sms' || method === 'email') {
+    await fetch('/mfa/request-otp', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({mfaSessionId, method})
+    });
+    alert(`OTP sent via ${method.toUpperCase()}! Check console for code.`);
+  }
+  
+  container.innerHTML = `
+    <div class="form-group">
+      <label>Enter ${method.toUpperCase()} Code</label>
+      <input type="text" id="mfaCode" placeholder="Enter code" required>
+    </div>
+    <button class="btn btn-primary" onclick="verifyMFA('${method}')">Verify</button>
+  `;
+}
+
+async function verifyMFA(method) {
+  const code = document.getElementById('mfaCode').value;
+  const status = document.getElementById('status');
+  
+  try {
+    const res = await fetch('/mfa/verify', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({mfaSessionId, method, code})
+    });
+    const result = await res.json();
+    
+    if (res.ok) {
+      status.innerHTML = '<div class="alert alert-success">MFA verified! Redirecting...</div>';
+      setTimeout(() => window.location.href = '/dashboard', 1000);
+    } else {
+      status.innerHTML = `<div class="alert alert-error">${result.error}</div>`;
+    }
+  } catch (error) {
+    status.innerHTML = '<div class="alert alert-error">Verification failed</div>';
+  }
+}
+</script>
+</body></html>

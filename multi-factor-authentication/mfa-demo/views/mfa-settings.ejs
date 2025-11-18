@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title>
+<link rel="stylesheet" href="/css/style.css"></head><body><nav class="navbar"><div class="container">
+<div class="nav-brand">🔐 MFA Demo</div><div class="nav-menu"><a href="/dashboard">Dashboard</a>
+<a href="/dashboard/mfa-settings" class="active">MFA Settings</a><span class="nav-user">👤 <%= user.username %></span>
+<a href="/dashboard/profile">Profile</a><a href="#" onclick="logout()">Logout</a></div></div></nav>
+<div class="main-content"><div class="container"><h1>MFA Settings</h1>
+<div class="profile-section"><h2>📱 Authenticator App (TOTP)</h2>
+<% const totpMethod = mfaMethods.find(m => m.type === 'totp'); %>
+<% if (totpMethod) { %>
+<p class="badge active">Enrolled</p><p>Last used: <%= totpMethod.lastUsed ? new Date(totpMethod.lastUsed).toLocaleString() : 'Never' %></p>
+<button onclick="disableMFA('totp')" class="btn btn-danger">Disable</button>
+<% } else { %>
+<p>Use Google Authenticator, Authy, or similar apps</p>
+<button onclick="enrollTOTP()" class="btn btn-primary">Enable Authenticator</button><% } %></div>
+<div id="totpSetup" style="display:none;margin-top:2rem" class="profile-section">
+<h3>Scan QR Code</h3><img id="qrCode" style="max-width:300px;border:1px solid #ddd;padding:10px">
+<p>Or enter manually: <code id="manualSecret"></code></p>
+<div class="form-group"><label>Enter code from app</label>
+<input type="text" id="totpCode" placeholder="123456"></div>
+<button onclick="verifyTOTP()" class="btn btn-primary">Verify & Enable</button></div>
+<div class="profile-section"><h2>💬 SMS OTP</h2>
+<% const smsMethod = mfaMethods.find(m => m.type === 'sms'); %>
+<% if (smsMethod) { %>
+<p class="badge active">Enrolled</p><p>Phone: <%= fullUser.phone %></p>
+<button onclick="disableMFA('sms')" class="btn btn-danger">Disable</button>
+<% } else { %>
+<p>Receive codes via text message</p><p>Phone: <%= fullUser.phone || 'Not set' %></p>
+<% if (fullUser.phone) { %>
+<button onclick="enrollSMS()" class="btn btn-primary">Enable SMS OTP</button><% } %><% } %></div>
+<div id="smsVerify" style="display:none" class="profile-section">
+<div class="form-group"><label>Enter SMS code</label>
+<input type="text" id="smsCode" placeholder="123456"></div>
+<button onclick="verifySMS()" class="btn btn-primary">Verify</button></div>
+<div class="profile-section"><h2>📧 Email OTP</h2>
+<% const emailMethod = mfaMethods.find(m => m.type === 'email'); %>
+<% if (emailMethod) { %>
+<p class="badge active">Enrolled</p><p>Email: <%= fullUser.email %></p>
+<button onclick="disableMFA('email')" class="btn btn-danger">Disable</button>
+<% } else { %>
+<p>Receive codes via email</p><p>Email: <%= fullUser.email %></p>
+<button onclick="enrollEmail()" class="btn btn-primary">Enable Email OTP</button><% } %></div>
+<div id="emailVerify" style="display:none" class="profile-section">
+<div class="form-group"><label>Enter email code</label>
+<input type="text" id="emailCode" placeholder="123456"></div>
+<button onclick="verifyEmail()" class="btn btn-primary">Verify</button></div>
+<div class="profile-section"><h2>🔑 Backup Codes</h2>
+<p>Emergency recovery codes. Each code can only be used once.</p>
+<p>Available codes: <strong><%= backupCodesCount %></strong></p>
+<button onclick="generateBackupCodes()" class="btn btn-secondary">Generate New Codes</button></div>
+<div id="backupCodes" style="display:none;margin-top:1rem"><h3>⚠️ Save these codes securely!</h3>
+<div class="backup-codes" id="codesList"></div>
+<button onclick="copyBackupCodes()" class="btn btn-primary">Copy All</button></div></div></div>
+<script>
+async function enrollTOTP(){try{const res=await fetch('/mfa/enroll/totp',{method:'POST'});
+const data=await res.json();document.getElementById('qrCode').src=data.qrCode;
+document.getElementById('manualSecret').textContent=data.secret;
+document.getElementById('totpSetup').style.display='block';}catch(e){alert('Error: '+e.message);}}
+async function verifyTOTP(){const code=document.getElementById('totpCode').value;
+try{const res=await fetch('/mfa/enroll/totp/verify',{method:'POST',headers:{'Content-Type':'application/json'},
+body:JSON.stringify({code})});if(res.ok){alert('TOTP enabled!');location.reload();}
+else{const err=await res.json();alert('Error: '+err.error);}}catch(e){alert('Error: '+e.message);}}
+async function enrollSMS(){try{await fetch('/mfa/enroll/sms',{method:'POST'});
+alert('SMS code sent! Check console.');document.getElementById('smsVerify').style.display='block';}catch(e){alert('Error');}}
+async function verifySMS(){const code=document.getElementById('smsCode').value;
+try{const res=await fetch('/mfa/enroll/sms/verify',{method:'POST',headers:{'Content-Type':'application/json'},
+body:JSON.stringify({code})});if(res.ok){alert('SMS OTP enabled!');location.reload();}
+else{alert('Invalid code');}}catch(e){alert('Error');}}
+async function enrollEmail(){try{await fetch('/mfa/enroll/email',{method:'POST'});
+alert('Email code sent! Check console.');document.getElementById('emailVerify').style.display='block';}catch(e){alert('Error');}}
+async function verifyEmail(){const code=document.getElementById('emailCode').value;
+try{const res=await fetch('/mfa/enroll/email/verify',{method:'POST',headers:{'Content-Type':'application/json'},
+body:JSON.stringify({code})});if(res.ok){alert('Email OTP enabled!');location.reload();}
+else{alert('Invalid code');}}catch(e){alert('Error');}}
+async function generateBackupCodes(){try{const res=await fetch('/mfa/backup-codes/generate',{method:'POST'});
+const data=await res.json();const list=data.codes.map(c=>`<code>${c}</code>`).join('<br>');
+document.getElementById('codesList').innerHTML=list;
+document.getElementById('backupCodes').style.display='block';}catch(e){alert('Error');}}
+async function disableMFA(type){if(!confirm(`Disable ${type.toUpperCase()} MFA?`))return;
+try{const res=await fetch(`/mfa/disable/${type}`,{method:'POST'});
+if(res.ok){alert('Disabled');location.reload();}}catch(e){alert('Error');}}
+function copyBackupCodes(){const codes=document.getElementById('codesList').innerText;
+navigator.clipboard.writeText(codes).then(()=>alert('Copied!')).catch(()=>alert('Failed'));}
+async function logout(){const res=await fetch('/auth/logout',{method:'POST'});if(res.ok)window.location.href='/';}
+</script></body></html>

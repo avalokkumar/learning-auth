@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title>
+<link rel="stylesheet" href="/css/style.css"></head><body><nav class="navbar"><div class="container">
+<div class="nav-brand">🔐 MFA Demo</div><div class="nav-menu"><a href="/dashboard">Dashboard</a>
+<a href="/dashboard/features" class="active">Features</a><span class="nav-user">👤 <%= user.username %></span>
+<a href="#" onclick="logout()">Logout</a></div></div></nav><div class="main-content"><div class="container">
+<h1>Multi-Factor Authentication Features</h1>
+<div class="features"><div class="feature-card"><span class="feature-icon">📱</span><h3>TOTP (Authenticator Apps)</h3>
+<p><strong>Time-Based One-Time Passwords</strong></p><ul><li>Codes change every 30 seconds</li>
+<li>Works offline</li><li>RFC 6238 compliant</li><li>Most secure option</li></ul>
+<p><strong>Supported Apps:</strong></p><ul><li>Google Authenticator</li><li>Microsoft Authenticator</li>
+<li>Authy</li><li>1Password</li><li>LastPass Authenticator</li></ul></div>
+<div class="feature-card"><span class="feature-icon">💬</span><h3>SMS OTP</h3>
+<p><strong>Text Message Verification</strong></p><ul><li>6-digit codes</li><li>5-minute expiration</li>
+<li>Works on any phone</li><li>No app needed</li></ul>
+<p><strong>Security Notes:</strong></p><ul><li>Vulnerable to SIM swapping</li><li>Requires cell signal</li>
+<li>Better than no MFA</li></ul></div>
+<div class="feature-card"><span class="feature-icon">📧</span><h3>Email OTP</h3>
+<p><strong>Email-Based Verification</strong></p><ul><li>6-digit codes via email</li>
+<li>5-minute expiration</li><li>Works anywhere</li><li>Good backup method</li></ul>
+<p><strong>Best For:</strong></p><ul><li>Backup authentication</li><li>When phone unavailable</li>
+<li>Desktop-only users</li></ul></div>
+<div class="feature-card"><span class="feature-icon">🔑</span><h3>Backup Recovery Codes</h3>
+<p><strong>Emergency Access</strong></p><ul><li>10 one-time use codes</li>
+<li>Use when device lost</li><li>SHA-256 hashed</li><li>Regenerate anytime</li></ul>
+<p><strong>Important:</strong></p><ul><li>Save codes securely</li><li>Each code works once</li>
+<li>Print or store in password manager</li></ul></div></div>
+<div class="docs-section"><h2>How MFA Works</h2>
+<p>Multi-Factor Authentication (MFA) requires you to verify your identity using <strong>two or more factors</strong>:</p>
+<ol><li><strong>Something You Know</strong> - Password or PIN</li>
+<li><strong>Something You Have</strong> - Phone, security key, or authenticator app</li>
+<li><strong>Something You Are</strong> - Biometrics (fingerprint, face)</li></ol>
+<p>This demo covers factors 1 and 2, providing passwordless security after initial login.</p></div>
+<div class="docs-section"><h2>Security Best Practices</h2><ul>
+<li>✅ Enable at least one MFA method</li><li>✅ Use TOTP for highest security</li>
+<li>✅ Keep backup codes in safe place</li><li>✅ Enable multiple methods for redundancy</li>
+<li>✅ Never share verification codes</li><li>❌ Don't use SMS as only method</li>
+<li>❌ Don't screenshot backup codes</li></ul></div></div></div>
+<script>async function logout(){const res=await fetch('/auth/logout',{method:'POST'});if(res.ok)window.location.href='/';}</script>
+</body></html>

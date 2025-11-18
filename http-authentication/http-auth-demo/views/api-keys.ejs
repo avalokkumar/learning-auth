@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand">🔐 HTTP Auth Demo</div>
+<div class="nav-menu"><a href="/dashboard">Dashboard</a><a href="/api-keys" class="active">API Keys</a>
+<span class="nav-user">👤 <%= user.username %></span><a href="/profile">Profile</a>
+<a href="#" onclick="logout()">Logout</a></div></div></nav>
+<div class="main-content"><div class="container"><div class="page-header"><h1>API Keys</h1>
+<button onclick="generateKey()" class="btn btn-primary">Generate New Key</button></div>
+<div class="keys-grid"><% if (apiKeys.length > 0) { %><% apiKeys.forEach(key => { %>
+<div class="key-card"><div class="key-header"><h3><%= key.name %></h3>
+<span class="badge <%= key.active ? 'active' : 'inactive' %>"><%= key.active ? 'Active' : 'Revoked' %></span></div>
+<div class="key-body"><p><strong>Key Prefix:</strong> <code><%= key.keyPrefix %></code></p>
+<p><strong>Created:</strong> <%= new Date(key.createdAt).toLocaleString() %></p>
+<% if (key.lastUsed) { %><p><strong>Last Used:</strong> <%= new Date(key.lastUsed).toLocaleString() %></p><% } %>
+<p><strong>Usage Count:</strong> <%= key.usageCount %></p></div>
+<% if (key.active) { %><button onclick="revokeKey('<%= key.id %>', '<%= key.name %>')" class="btn btn-danger btn-small">Revoke</button><% } %>
+</div><% }); %><% } else { %><div class="empty-state"><p>No API keys yet</p>
+<button onclick="generateKey()" class="btn btn-primary">Generate Your First Key</button></div><% } %></div>
+<div id="keyModal" class="modal" style="display:none"><div class="modal-content"><h2>API Key Generated</h2>
+<p class="warning">⚠️ Save this key now! You won't see it again.</p>
+<div class="api-key-display"><code id="apiKeyValue"></code></div>
+<button onclick="copyKey()" class="btn btn-primary">Copy to Clipboard</button>
+<button onclick="closeModal()" class="btn btn-secondary">Close</button></div></div></div></div>
+<script>
+async function generateKey() {
+  const name = prompt('Enter a name for this API key:');
+  if (!name) return;
+  try {
+    const res = await fetch('/auth/api-key', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({name})});
+    const data = await res.json();
+    if (res.ok) {
+      document.getElementById('apiKeyValue').textContent = data.apiKey;
+      document.getElementById('keyModal').style.display = 'flex';
+    } else {
+      alert('Error: ' + data.error);
+    }
+  } catch (error) {
+    alert('Failed to generate key');
+  }
+}
+async function revokeKey(id, name) {
+  if (!confirm(`Revoke API key "${name}"?`)) return;
+  try {
+    const res = await fetch(`/auth/api-key/${id}`, {method: 'DELETE'});
+    if (res.ok) {
+      alert('Key revoked');
+      location.reload();
+    }
+  } catch (error) {
+    alert('Failed to revoke key');
+  }
+}
+function copyKey() {
+  const key = document.getElementById('apiKeyValue').textContent;
+  navigator.clipboard.writeText(key).then(() => alert('Copied!')).catch(() => alert('Failed to copy'));
+}
+function closeModal() {
+  document.getElementById('keyModal').style.display = 'none';
+  location.reload();
+}
+async function logout() {
+  const res = await fetch('/auth/logout', {method: 'POST'});
+  if (res.ok) window.location.href = '/';
+}
+</script>
+</body></html>

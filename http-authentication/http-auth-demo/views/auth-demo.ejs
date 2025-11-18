@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title><link rel="stylesheet" href="/css/style.css"></head>
+<body><nav class="navbar"><div class="container"><div class="nav-brand">🔐 HTTP Auth Demo</div>
+<div class="nav-menu"><a href="/dashboard">Dashboard</a><a href="/auth-demo" class="active">Test Auth</a>
+<span class="nav-user">👤 <%= user.username %></span><a href="/profile">Profile</a>
+<a href="#" onclick="logout()">Logout</a></div></div></nav>
+<div class="main-content"><div class="container"><h1>Authentication Methods Tester</h1>
+<div class="docs-section"><h2>🔓 Test HTTP Basic Auth</h2>
+<p>Test Basic authentication with your credentials</p>
+<div class="form-group"><button onclick="testBasicAuth()" class="btn btn-primary">Test Basic Auth</button></div>
+<pre id="basicResult" style="background:#f4f4f4;padding:1rem;border-radius:6px;min-height:100px;display:none"></pre></div>
+<div class="docs-section"><h2>🔐 Test HTTP Digest Auth</h2>
+<p>Test Digest authentication (Note: Requires curl or specialized tool)</p>
+<div class="code-example"><pre>curl --digest -u <%= user.username %>:your_password http://localhost:3006/api/digest/user</pre></div>
+<p class="hint">Digest auth requires special client implementation. Use curl command above.</p></div>
+<div class="docs-section"><h2>🎫 Test Bearer Token</h2>
+<p>Get a JWT token and test Bearer authentication</p>
+<div class="form-group"><button onclick="getToken()" class="btn btn-primary">Get Token</button>
+<button onclick="testBearerAuth()" class="btn btn-secondary" id="testBearerBtn" disabled>Test Bearer Auth</button></div>
+<div id="tokenDisplay" style="display:none;margin:1rem 0"><p><strong>Access Token:</strong></p>
+<div class="api-key-display"><code id="accessToken"></code></div>
+<button onclick="copyToken()" class="btn btn-small btn-secondary">Copy Token</button></div>
+<pre id="bearerResult" style="background:#f4f4f4;padding:1rem;border-radius:6px;min-height:100px;display:none"></pre></div>
+<div class="docs-section"><h2>🔑 Test API Key</h2>
+<p>Generate an API key and test API Key authentication</p>
+<div class="form-group"><button onclick="generateTestKey()" class="btn btn-primary">Generate API Key</button>
+<button onclick="testApiKey()" class="btn btn-secondary" id="testApiKeyBtn" disabled>Test API Key</button></div>
+<div id="apiKeyDisplay" style="display:none;margin:1rem 0"><p><strong>API Key:</strong></p>
+<div class="api-key-display"><code id="apiKeyValue"></code></div>
+<button onclick="copyApiKey()" class="btn btn-small btn-secondary">Copy Key</button></div>
+<pre id="apiKeyResult" style="background:#f4f4f4;padding:1rem;border-radius:6px;min-height:100px;display:none"></pre></div>
+<div class="docs-section"><h2>📊 Test Multi-Auth Endpoint</h2>
+<p>Test endpoint that accepts multiple authentication methods</p>
+<div class="form-group"><button onclick="testMultiAuth()" class="btn btn-primary">Test Multi-Auth</button></div>
+<pre id="multiResult" style="background:#f4f4f4;padding:1rem;border-radius:6px;min-height:100px;display:none"></pre></div></div></div>
+<script>
+let currentToken = null;
+let currentApiKey = null;
+
+async function testBasicAuth() {
+  const result = document.getElementById('basicResult');
+  result.style.display = 'block';
+  result.textContent = 'Testing...';
+  try {
+    const username = '<%= user.username %>';
+    const password = prompt('Enter your password:');
+    if (!password) {
+      result.textContent = 'Cancelled';
+      return;
+    }
+    const auth = btoa(username + ':' + password);
+    const res = await fetch('/api/basic/user', {
+      headers: { 'Authorization': 'Basic ' + auth }
+    });
+    const data = await res.json();
+    result.textContent = JSON.stringify(data, null, 2);
+  } catch (error) {
+    result.textContent = 'Error: ' + error.message;
+  }
+}
+
+async function getToken() {
+  try {
+    const password = prompt('Enter your password to get token:');
+    if (!password) return;
+    const res = await fetch('/auth/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: '<%= user.username %>', password })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      currentToken = data.access_token;
+      document.getElementById('accessToken').textContent = currentToken;
+      document.getElementById('tokenDisplay').style.display = 'block';
+      document.getElementById('testBearerBtn').disabled = false;
+      alert('Token generated successfully!');
+    } else {
+      alert('Error: ' + data.error);
+    }
+  } catch (error) {
+    alert('Error: ' + error.message);
+  }
+}
+
+async function testBearerAuth() {
+  if (!currentToken) {
+    alert('Please get a token first');
+    return;
+  }
+  const result = document.getElementById('bearerResult');
+  result.style.display = 'block';
+  result.textContent = 'Testing...';
+  try {
+    const res = await fetch('/api/bearer/user', {
+      headers: { 'Authorization': 'Bearer ' + currentToken }
+    });
+    const data = await res.json();
+    result.textContent = JSON.stringify(data, null, 2);
+  } catch (error) {
+    result.textContent = 'Error: ' + error.message;
+  }
+}
+
+async function generateTestKey() {
+  try {
+    const name = 'Test Key ' + new Date().toISOString();
+    const res = await fetch('/auth/api-key', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      currentApiKey = data.apiKey;
+      document.getElementById('apiKeyValue').textContent = currentApiKey;
+      document.getElementById('apiKeyDisplay').style.display = 'block';
+      document.getElementById('testApiKeyBtn').disabled = false;
+      alert('API Key generated!');
+    } else {
+      alert('Error: ' + data.error);
+    }
+  } catch (error) {
+    alert('Error: ' + error.message);
+  }
+}
+
+async function testApiKey() {
+  if (!currentApiKey) {
+    alert('Please generate an API key first');
+    return;
+  }
+  const result = document.getElementById('apiKeyResult');
+  result.style.display = 'block';
+  result.textContent = 'Testing...';
+  try {
+    const res = await fetch('/api/apikey/user', {
+      headers: { 'X-API-Key': currentApiKey }
+    });
+    const data = await res.json();
+    result.textContent = JSON.stringify(data, null, 2);
+  } catch (error) {
+    result.textContent = 'Error: ' + error.message;
+  }
+}
+
+async function testMultiAuth() {
+  const result = document.getElementById('multiResult');
+  result.style.display = 'block';
+  result.textContent = 'Testing with current session...';
+  try {
+    // Use API key if available, otherwise Basic auth
+    const headers = {};
+    if (currentApiKey) {
+      headers['X-API-Key'] = currentApiKey;
+    } else if (currentToken) {
+      headers['Authorization'] = 'Bearer ' + currentToken;
+    }
+    
+    const res = await fetch('/api/user', { headers });
+    const data = await res.json();
+    result.textContent = JSON.stringify(data, null, 2);
+  } catch (error) {
+    result.textContent = 'Error: ' + error.message;
+  }
+}
+
+function copyToken() {
+  navigator.clipboard.writeText(currentToken).then(() => alert('Token copied!')).catch(() => alert('Failed to copy'));
+}
+
+function copyApiKey() {
+  navigator.clipboard.writeText(currentApiKey).then(() => alert('API key copied!')).catch(() => alert('Failed to copy'));
+}
+
+async function logout() {
+  const res = await fetch('/auth/logout', { method: 'POST' });
+  if (res.ok) window.location.href = '/';
+}
+</script>
+</body></html>

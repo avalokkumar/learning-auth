@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title>
+<link rel="stylesheet" href="/css/style.css"></head><body><nav class="navbar"><div class="container">
+<div class="nav-brand">🔐 MFA Demo</div><div class="nav-menu"><a href="/dashboard" class="active">Dashboard</a>
+<a href="/dashboard/features">Features</a><a href="/dashboard/mfa-settings">MFA Settings</a>
+<span class="nav-user">👤 <%= user.username %></span><a href="/dashboard/profile">Profile</a>
+<a href="#" onclick="logout()">Logout</a></div></div></nav><div class="main-content"><div class="container">
+<h1>Welcome, <%= user.displayName %>!</h1><div class="stats-grid"><div class="stat-card"><div class="stat-icon">🔐</div>
+<div class="stat-value"><%= fullUser.mfaEnabled ? 'Enabled' : 'Disabled' %></div><div class="stat-label">MFA Status</div></div>
+<div class="stat-card"><div class="stat-icon">📱</div><div class="stat-value"><%= mfaMethods.length %></div>
+<div class="stat-label">MFA Methods</div></div><div class="stat-card"><div class="stat-icon">📅</div>
+<div class="stat-value"><%= fullUser.lastLogin ? new Date(fullUser.lastLogin).toLocaleDateString() : 'Never' %></div>
+<div class="stat-label">Last Login</div></div><div class="stat-card"><div class="stat-icon">🔢</div>
+<div class="stat-value"><%= fullUser.stats.loginCount %></div><div class="stat-label">Total Logins</div></div></div>
+<div class="section"><h2>Your MFA Methods</h2><% if (mfaMethods.length > 0) { %>
+<div class="keys-grid"><% mfaMethods.forEach(method => { %>
+<div class="key-card"><div class="key-header"><h3><%= method.type.toUpperCase() %></h3>
+<span class="badge active">Active</span></div><div class="key-body">
+<p><strong>Enrolled:</strong> <%= new Date(method.enrolledAt).toLocaleString() %></p>
+<% if (method.lastUsed) { %><p><strong>Last Used:</strong> <%= new Date(method.lastUsed).toLocaleString() %></p><% } %>
+<p><strong>Usage:</strong> <%= method.usageCount %> times</p></div></div>
+<% }); %></div><% } else { %>
+<div class="empty-state"><p>No MFA methods configured</p>
+<a href="/dashboard/mfa-settings" class="btn btn-primary">Set Up MFA</a></div><% } %></div>
+<div class="section"><h2>Quick Actions</h2><div class="actions-grid">
+<a href="/dashboard/mfa-settings" class="action-card"><span class="action-icon">⚙️</span><h3>MFA Settings</h3>
+<p>Configure your multi-factor authentication</p></a>
+<a href="/dashboard/features" class="action-card"><span class="action-icon">✨</span><h3>View Features</h3>
+<p>Learn about available MFA methods</p></a>
+<a href="/dashboard/profile" class="action-card"><span class="action-icon">👤</span><h3>Your Profile</h3>
+<p>View account details and activity</p></a></div></div></div></div>
+<script>async function logout(){const res=await fetch('/auth/logout',{method:'POST'});if(res.ok)window.location.href='/';}</script>
+</body></html>
