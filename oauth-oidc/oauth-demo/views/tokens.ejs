@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title>
+<link rel="stylesheet" href="/css/style.css"></head><body><nav class="navbar"><div class="container">
+<div class="nav-brand">🔐 OAuth Demo</div><div class="nav-menu"><a href="/dashboard">Dashboard</a>
+<a href="/tokens" class="active">Tokens</a><span class="nav-user">👤 <%= user.displayName %></span>
+<a href="/auth/logout">Logout</a></div></div></nav><div class="main-content"><div class="container">
+<h1>Token Management</h1><div class="profile-card"><div class="profile-section"><h3>Access Token</h3>
+<% if (tokens.accessToken) { %>
+<div class="token-display"><code><%= tokens.accessToken.substring(0, 50) %>...</code>
+<button onclick="copyToken('access')" class="btn btn-small">Copy</button></div>
+<p class="hint">Access tokens are short-lived and used to access protected resources</p>
+<% } else { %><p>No access token available</p><% } %></div>
+<% if (tokens.refreshToken) { %>
+<div class="profile-section"><h3>Refresh Token</h3>
+<div class="token-display"><code><%= tokens.refreshToken.substring(0, 50) %>...</code>
+<button onclick="copyToken('refresh')" class="btn btn-small">Copy</button></div>
+<p class="hint">Refresh tokens are long-lived and used to obtain new access tokens</p></div>
+<% } %>
+<% if (tokens.idToken) { %>
+<div class="profile-section"><h3>ID Token (OpenID Connect)</h3>
+<div class="token-display"><code><%= tokens.idToken.substring(0, 50) %>...</code>
+<button onclick="copyToken('id')" class="btn btn-small">Copy</button></div>
+<p class="hint">ID tokens contain user identity information in JWT format</p></div>
+<% } %>
+<div class="profile-section"><h3>Token Expiry</h3>
+<% if (tokens.tokenExpiry) { %>
+<p><strong>Expires At:</strong> <%= new Date(tokens.tokenExpiry).toLocaleString() %></p>
+<p class="hint">Tokens will be automatically refreshed when they expire</p>
+<% } else { %><p>No expiry information available</p><% } %></div></div></div></div>
+<script>
+function copyToken(type){const token=`<%= tokens.accessToken || '' %>`;
+navigator.clipboard.writeText(token).then(()=>alert('Token copied!')).catch(()=>alert('Failed to copy'));}
+</script></body></html>

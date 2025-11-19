@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-brand">🔐 Password Auth Demo</div>
+      <div class="nav-menu">
+        <a href="/">Home</a>
+        <a href="/features">Features</a>
+        <% if (user) { %>
+          <a href="/dashboard">Dashboard</a>
+          <span class="nav-user">👤 <%= user.username %></span>
+          <a href="/auth/logout">Logout</a>
+        <% } else { %>
+          <a href="/login">Login</a>
+          <a href="/register" class="btn btn-primary">Sign Up</a>
+        <% } %>
+      </div>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="container">
+      <h1 class="hero-title">🔐 Advanced Password Authentication</h1>
+      <p class="hero-subtitle">Argon2id • Breach Detection • Security Best Practices</p>
+      <% if (!user) { %>
+        <div class="hero-buttons">
+          <a href="/register" class="btn btn-hero">Get Started</a>
+          <a href="/login" class="btn btn-secondary">Sign In</a>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="container">
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-value"><%= stats.totalUsers %></div>
+          <div class="stat-label">Total Users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔐</div>
+          <div class="stat-value"><%= stats.activeSessions %></div>
+          <div class="stat-label">Active Sessions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🛡️</div>
+          <div class="stat-value"><%= stats.lockedAccounts %></div>
+          <div class="stat-label">Protected Accounts</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-value"><%= stats.totalLogins %></div>
+          <div class="stat-label">Total Logins</div>
+        </div>
+      </section>
+
+      <section class="features">
+        <h2>Security Features</h2>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <span class="feature-icon">🔒</span>
+            <h3>Argon2id Hashing</h3>
+            <p>Industry-leading password hashing algorithm, winner of Password Hashing Competition</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">⚠️</span>
+            <h3>Breach Detection</h3>
+            <p>Checks against known breached passwords to prevent credential stuffing</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">📊</span>
+            <h3>Strength Validation</h3>
+            <p>Real-time password strength meter with detailed feedback</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">🚫</span>
+            <h3>Account Protection</h3>
+            <p>Automatic lockout after failed attempts with configurable policies</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">🔄</span>
+            <h3>Password History</h3>
+            <p>Prevents password reuse with configurable history length</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">🌐</span>
+            <h3>OAuth Alternative</h3>
+            <p>Optional Google and GitHub OAuth for passwordless authentication</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 Password Auth Demo - Educational Purpose</p>
+    </div>
+  </footer>
+</body>
+</html>

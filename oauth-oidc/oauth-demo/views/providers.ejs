@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title>
+<link rel="stylesheet" href="/css/style.css"></head><body><nav class="navbar"><div class="container">
+<div class="nav-brand">🔐 OAuth Demo</div><div class="nav-menu"><a href="/">Home</a>
+<a href="/providers" class="active">Providers</a><% if (user) { %><a href="/dashboard">Dashboard</a>
+<span class="nav-user">👤 <%= user.displayName %></span><a href="/auth/logout">Logout</a>
+<% } else { %><a href="/login">Login</a><% } %></div></div></nav>
+<div class="main-content"><div class="container"><h1>OAuth Provider Integrations</h1>
+<div class="provider-grid"><div class="provider-card google">
+<div class="provider-logo"><svg width="48" height="48" viewBox="0 0 48 48"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 48c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 48 24 48z"/><path fill="#FBBC05" d="M11.69 28.18c-.88-2.62-.88-5.45 0-8.07v-5.7H4.34c-3.46 6.89-3.46 15.07 0 21.96l7.35-5.7z"/><path fill="#EA4335" d="M24 9.5c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 2.89 29.93 0 24 0 15.4 0 7.96 6.93 4.34 14.81l7.35 5.7C13.42 13.37 18.27 9.5 24 9.5z"/></svg></div>
+<h3>Google OAuth 2.0</h3><p>Sign in with Google account</p>
+<ul><li>Google+ profile access</li><li>Gmail integration ready</li><li>OpenID Connect compliant</li></ul>
+<% if (!user) { %><a href="/auth/google" class="btn btn-google">Connect Google</a><% } %>
+</div><div class="provider-card microsoft">
+<div class="provider-logo"><svg width="48" height="48" viewBox="0 0 48 48"><path fill="#f35325" d="M0 0h22.8v22.8H0z"/><path fill="#81bc06" d="M25.2 0H48v22.8H25.2z"/><path fill="#05a6f0" d="M0 25.2h22.8V48H0z"/><path fill="#ffba08" d="M25.2 25.2H48V48H25.2z"/></svg></div>
+<h3>Microsoft OAuth 2.0</h3><p>Sign in with Microsoft Account</p>
+<ul><li>Azure AD integration</li><li>Office 365 access</li><li>Enterprise features</li></ul>
+<% if (!user) { %><a href="/auth/microsoft" class="btn btn-microsoft">Connect Microsoft</a><% } %>
+</div><div class="provider-card github">
+<div class="provider-logo"><svg width="48" height="48" viewBox="0 0 48 48"><path fill="#fff" d="M24 0C10.74 0 0 11.06 0 24.72c0 10.92 6.87 20.16 16.4 23.44 1.2.22 1.64-.53 1.64-1.18v-4.6c-6.68 1.5-8.09-3.31-8.09-3.31-1.09-2.87-2.66-3.63-2.66-3.63-2.18-1.53.16-1.5.16-1.5 2.41.18 3.68 2.55 3.68 2.55 2.14 3.77 5.61 2.68 6.97 2.05.22-1.59.84-2.68 1.52-3.3-5.33-.62-10.93-2.74-10.93-12.19 0-2.69.93-4.89 2.45-6.61-.25-.63-.93-3.16.23-6.58 0 0 2-.66 6.55 2.52 1.9-.54 3.93-.81 5.95-.82 2.02.01 4.05.28 5.95.82 4.55-3.18 6.55-2.52 6.55-2.52 1.16 3.42.48 5.95.23 6.58 1.52 1.72 2.45 3.92 2.45 6.61 0 9.47-5.61 11.57-10.95 12.18.86.76 1.63 2.26 1.63 4.55v6.75c0 .65.44 1.41 1.65 1.17 9.53-3.27 16.4-12.52 16.4-23.43 0-13.66-10.74-24.72-24-24.72z"/></svg></div>
+<h3>GitHub OAuth 2.0</h3><p>Sign in with GitHub account</p>
+<ul><li>Developer-friendly</li><li>Repository access</li><li>Gist integration</li></ul>
+<% if (!user) { %><a href="/auth/github" class="btn btn-github">Connect GitHub</a><% } %>
+</div></div></div></div></body></html>

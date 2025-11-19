@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-brand">🔐 Password Auth Demo</div>
+      <div class="nav-menu">
+        <a href="/">Home</a>
+        <a href="/login">Sign In</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <h1>📝 Create Account</h1>
+      <p class="auth-subtitle">Join us with a strong, secure password</p>
+
+      <div id="message-container"></div>
+
+      <form id="registerForm" class="auth-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName">
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required>
+          <small>3-30 characters, letters, numbers, and underscores only</small>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required>
+          <div id="strength-meter" class="strength-meter">
+            <div id="strength-bar" class="strength-bar"></div>
+          </div>
+          <div id="strength-label" class="strength-label"></div>
+          <div id="password-feedback" class="password-feedback"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="registerBtn">
+          Create Account
+        </button>
+      </form>
+
+      <div class="divider">OR</div>
+
+      <div class="oauth-buttons">
+        <a href="/auth/google" class="btn btn-google">
+          <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707 0-.593.102-1.17.282-1.709V4.958H.957C.347 6.173 0 7.548 0 9c0 1.452.348 2.827.957 4.042l3.007-2.335z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+          Sign up with Google
+        </a>
+        <a href="/auth/github" class="btn btn-github">
+          <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#fff" d="M9 0C4.03 0 0 4.13 0 9.23c0 4.08 2.58 7.54 6.15 8.76.45.08.62-.2.62-.44v-1.7c-2.51.54-3.04-1.24-3.04-1.24-.41-1.07-1-1.35-1-1.35-.82-.57.06-.56.06-.56.91.06 1.38.95 1.38.95.8 1.41 2.1 1 2.61.76.08-.59.31-1 .57-1.23-2-.23-4.1-1.02-4.10-4.55 0-1 .35-1.82.93-2.46-.09-.23-.4-1.15.09-2.4 0 0 .76-.25 2.48.95.72-.2 1.49-.3 2.26-.31.77 0 1.54.1 2.26.31 1.72-1.2 2.48-.95 2.48-.95.49 1.25.18 2.17.09 2.4.58.64.93 1.46.93 2.46 0 3.54-2.1 4.32-4.11 4.55.32.28.61.84.61 1.7v2.52c0 .24.17.53.62.44C15.42 16.77 18 13.31 18 9.23 18 4.13 13.97 0 9 0z"/></svg>
+          Sign up with GitHub
+        </a>
+      </div>
+
+      <p class="auth-footer">
+        Already have an account? <a href="/login">Sign in</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="/js/register.js"></script>
+</body>
+</html>

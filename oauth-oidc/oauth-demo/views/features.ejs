@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title>
+<link rel="stylesheet" href="/css/style.css"></head><body><nav class="navbar"><div class="container">
+<div class="nav-brand">🔐 OAuth Demo</div><div class="nav-menu"><a href="/">Home</a>
+<a href="/features" class="active">Features</a><% if (user) { %><a href="/dashboard">Dashboard</a>
+<span class="nav-user">👤 <%= user.displayName %></span><a href="/auth/logout">Logout</a>
+<% } else { %><a href="/login">Login</a><% } %></div></div></nav>
+<div class="main-content"><div class="container"><h1>OAuth 2.0 & OpenID Connect Features</h1>
+<div class="features"><div class="feature-card"><span class="feature-icon">🔵</span><h3>Authorization Code Flow</h3>
+<p>The most secure OAuth 2.0 flow for web applications</p><ul>
+<li>PKCE (Proof Key for Code Exchange)</li><li>State parameter for CSRF protection</li>
+<li>Server-to-server token exchange</li><li>Refresh token support</li></ul></div>
+<div class="feature-card"><span class="feature-icon">🆔</span><h3>OpenID Connect</h3>
+<p>Authentication layer on top of OAuth 2.0</p><ul><li>ID Token (JWT) with user identity</li>
+<li>UserInfo endpoint for profile data</li><li>Standardized claims (email, name, picture)</li>
+<li>Discovery and dynamic registration</li></ul></div>
+<div class="feature-card"><span class="feature-icon">🔄</span><h3>Token Refresh</h3>
+<p>Seamless token renewal without re-authentication</p><ul>
+<li>Long-lived refresh tokens</li><li>Automatic access token refresh</li>
+<li>Silent authentication</li><li>Reduced user friction</li></ul></div>
+<div class="feature-card"><span class="feature-icon">🔒</span><h3>Security</h3>
+<p>Enterprise-grade security features</p><ul><li>Encrypted token storage</li>
+<li>Secure session management</li><li>CSRF protection</li><li>Audit logging</li></ul></div>
+<div class="feature-card"><span class="feature-icon">🌐</span><h3>Multiple Providers</h3>
+<p>Support for major OAuth providers</p><ul><li>Google OAuth 2.0</li>
+<li>Microsoft Azure AD</li><li>GitHub OAuth</li><li>Easy to add more</li></ul></div>
+<div class="feature-card"><span class="feature-icon">⚡</span><h3>Performance</h3>
+<p>Optimized for speed and scalability</p><ul><li>In-memory database (demo)</li>
+<li>Efficient token caching</li><li>Session reuse</li><li>Production-ready patterns</li></ul></div>
+</div></div></div></body></html>

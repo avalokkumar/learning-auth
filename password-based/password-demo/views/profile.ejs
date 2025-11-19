@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title>
+<link rel="stylesheet" href="/css/style.css"></head><body><nav class="navbar"><div class="container">
+<div class="nav-brand">🔐 Password Auth</div><div class="nav-menu">
+<a href="/dashboard">Dashboard</a><span class="nav-user">👤 <%= user.username %></span>
+<a href="/profile" class="active">Profile</a><a href="/auth/logout">Logout</a></div></div></nav>
+<div class="main-content"><div class="container"><h1>Your Profile</h1>
+<div class="profile-card"><div class="profile-section"><h3>Account Information</h3>
+<div class="info-row"><span class="label">User ID:</span><span class="value code"><%= user.id %></span></div>
+<div class="info-row"><span class="label">Username:</span><span class="value"><%= user.username %></span></div>
+<div class="info-row"><span class="label">Email:</span><span class="value"><%= user.email %></span></div>
+<div class="info-row"><span class="label">Full Name:</span><span class="value"><%= user.firstName %> <%= user.lastName %></span></div>
+<div class="info-row"><span class="label">Created:</span><span class="value"><%= new Date(user.createdAt).toLocaleDateString() %></span></div>
+<div class="info-row"><span class="label">Last Login:</span><span class="value"><%= new Date(user.lastLogin).toLocaleString() %></span></div>
+</div>
+<div class="profile-section"><h3>Password Information</h3>
+<div class="info-row"><span class="label">Last Changed:</span><span class="value"><%= new Date(user.passwordLastChanged).toLocaleDateString() %></span></div>
+<div class="info-row"><span class="label">Password Changes:</span><span class="value"><%= user.stats.passwordChangeCount %></span></div>
+<div class="info-row"><span class="label">History Length:</span><span class="value"><%= passwordHistory.length %> passwords stored</span></div>
+</div>
+<div class="profile-section"><h3>OAuth Providers</h3>
+<% if (user.oauthProviders.length > 0) { %>
+<p>Linked providers: <%= user.oauthProviders.join(', ') %></p>
+<% } else { %>
+<p>No OAuth providers linked. <a href="/security">Link an account</a></p>
+<% } %>
+</div>
+<div class="profile-section"><h3>Recent Activity</h3>
+<% if (auditLogs.length > 0) { %>
+<div class="audit-log">
+<% auditLogs.forEach(log => { %>
+<div class="log-entry">
+<span class="log-time"><%= new Date(log.timestamp).toLocaleString() %></span>
+<span class="log-action"><%= log.action.replace(/_/g, ' ') %></span>
+</div>
+<% }); %>
+</div>
+<% } else { %><p>No recent activity</p><% } %>
+</div></div></div></div>
+</body></html>

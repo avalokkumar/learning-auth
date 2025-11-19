@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title>
+<link rel="stylesheet" href="/css/style.css"></head><body><nav class="navbar"><div class="container">
+<div class="nav-brand">🔐 OAuth Demo</div><div class="nav-menu"><a href="/dashboard">Dashboard</a>
+<span class="nav-user">👤 <%= user.displayName %></span><a href="/profile" class="active">Profile</a>
+<a href="/auth/logout">Logout</a></div></div></nav><div class="main-content"><div class="container">
+<h1>Your Profile</h1><div class="profile-card"><div class="profile-header">
+<img src="<%= user.avatar %>" alt="Avatar" class="profile-avatar" onerror="this.src='/default-avatar.png'">
+<div><h2><%= user.displayName %></h2><p class="provider-label">via <%= user.provider.toUpperCase() %></p></div>
+</div><div class="profile-section"><h3>Account Information</h3>
+<div class="info-row"><span class="label">Email:</span><span class="value"><%= user.email %></span></div>
+<div class="info-row"><span class="label">Display Name:</span><span class="value"><%= user.displayName %></span></div>
+<% if (user.givenName) { %>
+<div class="info-row"><span class="label">First Name:</span><span class="value"><%= user.givenName %></span></div>
+<% } %>
+<% if (user.familyName) { %>
+<div class="info-row"><span class="label">Last Name:</span><span class="value"><%= user.familyName %></span></div>
+<% } %>
+<div class="info-row"><span class="label">Provider:</span><span class="value"><%= user.provider %></span></div>
+<div class="info-row"><span class="label">User ID:</span><span class="value code"><%= user.id %></span></div>
+<div class="info-row"><span class="label">Provider ID:</span><span class="value code"><%= user.providerId %></span></div>
+</div><div class="profile-section"><h3>OAuth Tokens</h3>
+<% if (tokens.accessToken) { %>
+<div class="info-row"><span class="label">Access Token:</span>
+<span class="value code"><%= tokens.accessToken.substring(0, 20) %>...</span></div>
+<% } %>
+<% if (tokens.tokenExpiry) { %>
+<div class="info-row"><span class="label">Expires At:</span>
+<span class="value"><%= new Date(tokens.tokenExpiry).toLocaleString() %></span></div>
+<% } %>
+<p class="hint">Tokens are encrypted at rest for security</p></div>
+<div class="profile-section"><h3>Activity</h3>
+<div class="info-row"><span class="label">Member Since:</span>
+<span class="value"><%= new Date(user.createdAt).toLocaleDateString() %></span></div>
+<div class="info-row"><span class="label">Last Login:</span>
+<span class="value"><%= new Date(user.lastLogin).toLocaleString() %></span></div>
+<div class="info-row"><span class="label">Total Logins:</span><span class="value"><%= user.stats.loginCount %></span></div>
+</div><div class="profile-section"><h3>Recent Audit Logs</h3>
+<% if (auditLogs.length > 0) { %><div class="audit-log">
+<% auditLogs.forEach(log => { %>
+<div class="log-entry"><span class="log-time"><%= new Date(log.timestamp).toLocaleString() %></span>
+<span class="log-action"><%= log.action.replace(/_/g, ' ') %></span></div>
+<% }); %></div><% } else { %><p>No recent activity</p><% } %></div></div></div></div>
+</body></html>

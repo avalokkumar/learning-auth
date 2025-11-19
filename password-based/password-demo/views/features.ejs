@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title><%= title %></title>
+<link rel="stylesheet" href="/css/style.css"></head><body><nav class="navbar"><div class="container">
+<div class="nav-brand">🔐 Password Auth</div><div class="nav-menu"><a href="/">Home</a>
+<a href="/features" class="active">Features</a>
+<% if (user) { %><a href="/dashboard">Dashboard</a><a href="/auth/logout">Logout</a>
+<% } else { %><a href="/login">Login</a><% } %></div></div></nav>
+<div class="main-content"><div class="container"><h1>Security Features</h1>
+<div class="features"><div class="feature-card"><span class="feature-icon">🔒</span><h3>Argon2id Password Hashing</h3>
+<p>Winner of the Password Hashing Competition (PHC) 2015. Memory-hard, GPU-resistant, and tunable for future hardware.</p>
+<ul><li>64 MB memory cost</li><li>3 iterations</li><li>4 parallel threads</li><li>Side-channel resistant</li></ul></div>
+<div class="feature-card"><span class="feature-icon">⚠️</span><h3>Breach Detection</h3>
+<p>Checks passwords against known data breaches to prevent credential stuffing attacks.</p>
+<ul><li>HaveIBeenPwned integration</li><li>k-Anonymity protocol</li><li>Real-time checking</li><li>No password sent over network</li></ul></div>
+<div class="feature-card"><span class="feature-icon">📊</span><h3>Password Strength Validation</h3>
+<p>Advanced strength meter using zxcvbn library with detailed feedback.</p>
+<ul><li>Real-time strength calculation</li><li>Pattern detection</li><li>Dictionary checks</li><li>Crack time estimation</li></ul></div>
+<div class="feature-card"><span class="feature-icon">🚫</span><h3>Account Lockout Protection</h3>
+<p>Automatic protection against brute force attacks with configurable policies.</p>
+<ul><li>5 failed attempts threshold</li><li>15-minute lockout duration</li><li>IP-based tracking</li><li>Audit logging</li></ul></div>
+<div class="feature-card"><span class="feature-icon">🔄</span><h3>Password History</h3>
+<p>Prevents password reuse to maintain security over time.</p>
+<ul><li>Stores last 12 passwords</li><li>Hashed storage</li><li>Prevents pattern reuse</li><li>Configurable length</li></ul></div>
+<div class="feature-card"><span class="feature-icon">⏰</span><h3>Password Expiration</h3>
+<p>Configurable password expiration policies for compliance.</p>
+<ul><li>90-day default expiry</li><li>Advance warning notifications</li><li>Forced password change</li><li>Customizable per user</li></ul></div>
+<div class="feature-card"><span class="feature-icon">🌐</span><h3>OAuth Alternative Authentication</h3>
+<p>Optional passwordless authentication through trusted providers.</p>
+<ul><li>Google OAuth 2.0</li><li>GitHub OAuth</li><li>Account linking</li><li>Seamless integration</li></ul></div>
+<div class="feature-card"><span class="feature-icon">🛡️</span><h3>Security Best Practices</h3>
+<p>Implementation follows OWASP, NIST, and PCI-DSS guidelines.</p>
+<ul><li>HTTPS/TLS encryption</li><li>Secure session management</li><li>CSRF protection</li><li>Rate limiting</li></ul></div>
+</div></div></div>
+</body></html>
